@@ -1,4 +1,4 @@
-package boardtests;
+package board;
 
 import static org.junit.Assert.*;
 

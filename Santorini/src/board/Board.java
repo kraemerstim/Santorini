@@ -1,19 +1,24 @@
 package board;
 
 import exceptions.FieldAlreadyOccupiedException;
+import exceptions.MaxLevelAlreadyReachedException;
 import exceptions.TooManySameColorWorkersOnBoardException;
 
 public class Board {
-	private static final int BOARDSIZE = 5;
+
+	public static final int BOARDSIZE = 5;
 	private Field[][] board;
+
+	public Board() {
+		initBoard();
+	}
 
 	public Field getField(int x, int y) {
 		return board[x][y];
 	}
 
-	public Board() {
-		super();
-		initBoard();
+	public Field getField(Coords from) {
+		return board[from.getX()][from.getY()];
 	}
 
 	private void initBoard() {
@@ -26,10 +31,21 @@ public class Board {
 	public void setWorker(int i, int j, Color color) throws Exception {
 		if (getField(i,j).getWorkerColor() != Color.None)
 			throw new FieldAlreadyOccupiedException();
-		
+
 		if (getWorkerCountByColor(color) >= 2)
 			throw new TooManySameColorWorkersOnBoardException();
-		getField(i, j).setWorkerColor(color);		
+
+		getField(i, j).setWorkerColor(color);
+	}
+
+	public void setBlock(int x, int y) throws MaxLevelAlreadyReachedException, FieldAlreadyOccupiedException {
+		if (board[x][y].getLevel() >= 4)
+			throw new MaxLevelAlreadyReachedException();
+
+		if (board[x][y].getWorkerColor() != Color.None)
+			throw new FieldAlreadyOccupiedException();
+
+		board[x][y].setLevel(board[x][y].getLevel() + 1);
 	}
 
 	private int getWorkerCountByColor(Color color) {

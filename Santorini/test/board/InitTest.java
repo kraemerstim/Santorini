@@ -1,11 +1,10 @@
-package boardtests;
+package board;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import board.*;
 import exceptions.FieldAlreadyOccupiedException;
 import exceptions.TooManySameColorWorkersOnBoardException;
 
