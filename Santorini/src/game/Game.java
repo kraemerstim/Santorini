@@ -9,7 +9,8 @@ public class Game {
 
 	private Board board;
 
-	private int currentPlayer = 2;
+	private int currentPlayer = 0;
+	private static final int PLAYER_COUNT = 2;
 
 	private IPlayer player1;
 	private IPlayer player2;
@@ -32,7 +33,7 @@ public class Game {
 
 	public void start() {
 		while (notGameOver());
-		System.out.println("Player " + currentPlayer + " has won!");
+		System.out.println("Player " + (currentPlayer+1) + " has won!");
 	}
 
 	private boolean notGameOver() {
@@ -49,9 +50,9 @@ public class Game {
 		MoveValidator moveValidator = new MoveValidator(board);
 		toggleCurrentPlayer();
 		do {
-			System.out.println("Player " + currentPlayer + " (" + getColorByPlayer().toString() + "), it's your turn!");
+			System.out.println("Player " + (currentPlayer+1) + " (" + getColorByPlayer().toString() + "), it's your turn!");
 			System.out.println("Enter three coords, 1. current field, 2. field to move, 3. field to build. For example: (1,1),(1,2),(2,2)");
-			if (currentPlayer == 1)
+			if (currentPlayer == 0)
 				move = player1.nextMove(board);
 			else
 				move = player2.nextMove(board);
@@ -60,10 +61,7 @@ public class Game {
 	}
 
 	private void toggleCurrentPlayer() {
-		if (currentPlayer == 1)
-			currentPlayer = 2;
-		else
-			currentPlayer = 1;
+		currentPlayer = (currentPlayer++)%PLAYER_COUNT;
 	}
 
 	private boolean isGameOver(Move move) {
@@ -104,7 +102,7 @@ public class Game {
 		line.append(String.valueOf(i));
 
 		for (int j = 0; j < Board.BOARDSIZE; j++) {
-			line.append("  " + String.valueOf(board.getField(i, j).getLevel()));
+			line.append("| " + String.valueOf(board.getField(i, j).getLevel()));
 			if (board.getField(i, j).getWorkerColor() == Color.Blue)
 				line.append("b");
 			else if (board.getField(i, j).getWorkerColor() == Color.White)

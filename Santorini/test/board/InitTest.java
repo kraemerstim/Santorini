@@ -29,22 +29,22 @@ public class InitTest {
 	
 	@Test
 	public void setFirstWorkerProvidingWorkerOnField() throws Exception {
-		board.setWorker(0, 0, Color.Blue);
+		board.setWorker(new Coords(0,0), Color.Blue);
 		assertEquals(Color.Blue, board.getField(0, 0).getWorkerColor());
 	}
 	
 	@Test(expected=FieldAlreadyOccupiedException.class)
 	public void setSecondWorkerOnSameFieldShouldFail() throws Exception
 	{
-		board.setWorker(0, 0, Color.Blue);
-		board.setWorker(0, 0, Color.White);
+		board.setWorker(new Coords(0,0), Color.Blue);
+		board.setWorker(new Coords(0,0), Color.White);
 	}
 	
 	
 	@Test(expected=TooManySameColorWorkersOnBoardException.class)
 	public void setThirdWorkerOfSameColorShouldFail() throws Exception {
 		for (int i = 0; i < 3; i++)
-			board.setWorker(0, i, Color.Blue);
+			board.setWorker(new Coords(0,i), Color.Blue);
 	}
 	
 	@Test

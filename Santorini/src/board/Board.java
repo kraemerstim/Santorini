@@ -28,14 +28,14 @@ public class Board {
 				board[i][j] = new Field();
 	}
 
-	public void setWorker(int i, int j, Color color) throws Exception {
-		if (getField(i,j).getWorkerColor() != Color.None)
+	public void setWorker(Coords fieldCoords, Color color) throws Exception {
+		if (getField(fieldCoords).getWorkerColor() != Color.None)
 			throw new FieldAlreadyOccupiedException();
 
 		if (getWorkerCountByColor(color) >= 2)
 			throw new TooManySameColorWorkersOnBoardException();
 
-		getField(i, j).setWorkerColor(color);
+		getField(fieldCoords).setWorkerColor(color);
 	}
 
 	public void setBlock(int x, int y) throws MaxLevelAlreadyReachedException, FieldAlreadyOccupiedException {

@@ -12,6 +12,7 @@ public class ConsolePlayer implements IPlayer {
 	public Move nextMove(Board board) {
 		Scanner scanner = new Scanner(System.in);
 		String input = scanner.nextLine();
+		scanner.close();
 		return parseInput(input);
 	}
 
