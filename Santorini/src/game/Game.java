@@ -2,7 +2,6 @@ package game;
 
 import board.Board;
 import board.Color;
-import board.Coords;
 import player.IPlayer;
 import player.ConsolePlayer;
 
@@ -47,6 +46,7 @@ public class Game {
 
 	private Move getNextMove() {
 		Move move;
+		MoveValidator moveValidator = new MoveValidator(board);
 		toggleCurrentPlayer();
 		do {
 			System.out.println("Player " + currentPlayer + " (" + getColorByPlayer().toString() + "), it's your turn!");
@@ -55,43 +55,9 @@ public class Game {
 				move = player1.nextMove(board);
 			else
 				move = player2.nextMove(board);
-		} while (!isMoveValid(move));
+		} while (!moveValidator.isValid(move));
 		return move;
 	}
-
-	private boolean isMoveValid(Move move) {
-		return canMoveWorker(move) && canBuild(move);
-	}
-
-	private boolean canBuild(Move move) {
-		return areNeighbours(move.getTo(), move.getBuild()) && isBuildPossibleField(move) && isPossibleBuildLevel(move.getBuild());
-	}
-
-	private boolean isBuildPossibleField(Move move) {
-		return isFieldEmpty(move.getBuild()) && (move.getTo().toString() != move.getBuild().toString()) || (move.getFrom().toString() == move.getBuild().toString());
-	}
-
-	private boolean canMoveWorker(Move move) {
-		return areNeighbours(move.getFrom(), move.getTo()) && isFieldEmpty(move.getTo()) && arePossibleMoveLevels(move.getFrom(), move.getTo());
-	}
-
-	private boolean arePossibleMoveLevels(Coords from, Coords to) {
-		return (board.getField(from).getLevel() < board.getField(to).getLevel()) ||
-			   (board.getField(from).getLevel() - board.getField(to).getLevel() <= 1);
-	}
-
-	private boolean areNeighbours(Coords from, Coords to) {
-		return Math.abs(from.getX() - to.getX()) <= 1 && Math.abs(from.getY() - to.getY()) <= 1;
-	}
-
-	private boolean isFieldEmpty(Coords build) {
-		return board.getField(build).getWorkerColor() == Color.None;
-	}
-
-	private boolean isPossibleBuildLevel(Coords build) {
-		return board.getField(build).getLevel() < 4;
-	}
-
 
 	private void toggleCurrentPlayer() {
 		if (currentPlayer == 1)
@@ -105,6 +71,7 @@ public class Game {
 	}
 
 	private boolean isLastMove(Move move) {
+		// TODO should check if next player can move
 		return false;
 	}
 
