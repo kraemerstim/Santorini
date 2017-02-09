@@ -31,10 +31,12 @@ public class Game {
 
 	private void initGame() {
 		viewer = new ConsoleViewer();
+		//TODO scanner sollte nicht im Game sein sondern im ConsolePlayer
 		scanner = new Scanner(System.in);
 		playerMangager = new PlayerManager(new ConsolePlayer(scanner, Color.Blue), new ConsolePlayer(scanner, Color.White));
 
 		board = new Board();
+		//TODO bzw. die ganze Klasse ist eigentlich ein Testcase
 		board.getField(1,1).setWorkerColor(Color.Blue);
 		board.getField(2,3).setWorkerColor(Color.Blue);
 		board.getField(1,2).setWorkerColor(Color.White);
@@ -47,6 +49,7 @@ public class Game {
 		scanner.close();
 	}
 
+	//TODO Methodennamen überdenken
 	private boolean notGameOver() {
 		viewer.showBoard(board);
 

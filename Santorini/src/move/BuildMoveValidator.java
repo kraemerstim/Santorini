@@ -16,7 +16,7 @@ public class BuildMoveValidator {
 	}
 
 	private boolean isPossibleBuildField(Move move) {
-		return board.getField(move.getBuild()).isEmtpty() && (!move.getTo().equals(move.getBuild()) || (move.getFrom().equals(move.getBuild())));
+		return board.getField(move.getBuild()).isEmpty() && (!move.getTo().equals(move.getBuild()) || (move.getFrom().equals(move.getBuild())));
 	}
 
 	private boolean isPossibleBuildLevel(Coord build) {

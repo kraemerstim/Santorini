@@ -26,7 +26,7 @@ public class Field {
 		this.workerColor = workerColor;
 	}
 
-	public boolean isEmtpty() {
+	public boolean isEmpty() {
 		return this.workerColor.equals(Color.None);
 	}
 }

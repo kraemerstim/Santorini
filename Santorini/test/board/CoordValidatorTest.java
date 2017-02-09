@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class CoordValidatorTest {
 
-	CoordValidator validator;
+	ICoordValidator validator;
 
 	@Before
 	public void setup() {

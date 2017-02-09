@@ -29,12 +29,12 @@ public class WorkerMoveValidator {
 	}
 
 	private boolean isFieldEmpty(Coord coord) {
-		return board.getField(coord).isEmtpty();
+		return board.getField(coord).isEmpty();
 	}
 
 	private boolean arePossibleMoveLevels(Coord from, Coord to) {
-		return (board.getField(from).getLevel() < board.getField(to).getLevel()) ||
-			   (board.getField(from).getLevel() - board.getField(to).getLevel() <= 1);
+		return (board.getField(to).getLevel() < board.getField(from).getLevel()) ||
+			   (board.getField(to).getLevel() - board.getField(from).getLevel() <= 1);
 	}
 
 }
