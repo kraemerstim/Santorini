@@ -17,7 +17,7 @@ public class Board {
 		return board[x][y];
 	}
 
-	public Field getField(Coords from) {
+	public Field getField(Coord from) {
 		return board[from.getX()][from.getY()];
 	}
 
@@ -28,7 +28,7 @@ public class Board {
 				board[i][j] = new Field();
 	}
 
-	public void setWorker(Coords fieldCoords, Color color) throws Exception {
+	public void setWorker(Coord fieldCoords, Color color) throws Exception {
 		if (getField(fieldCoords).getWorkerColor() != Color.None)
 			throw new FieldAlreadyOccupiedException();
 

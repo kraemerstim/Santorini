@@ -1,5 +1,5 @@
-/board/
-/exceptions/
+/move/
 /game/
+/board/
 /player/
-/seralization/
+/view/

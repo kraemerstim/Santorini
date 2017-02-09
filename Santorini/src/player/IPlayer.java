@@ -1,10 +1,13 @@
 package player;
 
 import board.Board;
-import game.Move;
+import board.Color;
+import move.Move;
 
 public interface IPlayer {
 
 	Move nextMove(Board board);
+
+	Color getColor();
 
 }

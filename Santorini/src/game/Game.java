@@ -1,30 +1,40 @@
 package game;
 
+import java.util.Scanner;
+
 import board.Board;
 import board.Color;
+import move.BuildMoveValidator;
+import move.Move;
+import move.MoveValidator;
+import move.IMoveValidator;
+import move.WorkerMoveValidator;
 import player.IPlayer;
+import player.IPlayerManager;
+import player.PlayerManager;
+import view.ConsoleViewer;
+import view.IViewer;
 import player.ConsolePlayer;
 
 public class Game {
 
+	private Scanner scanner;
+
 	private Board board;
 
-	private int currentPlayer = 0;
-	private static final int PLAYER_COUNT = 2;
-
-	private IPlayer player1;
-	private IPlayer player2;
-
+	private IPlayerManager playerMangager;
+	private IViewer viewer;
 
 	public Game() {
-		board = new Board();
 		initGame();
-
-		player1 = new ConsolePlayer();
-		player2 = new ConsolePlayer();
 	}
 
 	private void initGame() {
+		viewer = new ConsoleViewer();
+		scanner = new Scanner(System.in);
+		playerMangager = new PlayerManager(new ConsolePlayer(scanner, Color.Blue), new ConsolePlayer(scanner, Color.White));
+
+		board = new Board();
 		board.getField(1,1).setWorkerColor(Color.Blue);
 		board.getField(2,3).setWorkerColor(Color.Blue);
 		board.getField(1,2).setWorkerColor(Color.White);
@@ -33,11 +43,12 @@ public class Game {
 
 	public void start() {
 		while (notGameOver());
-		System.out.println("Player " + (currentPlayer+1) + " has won!");
+		viewer.showWinner(playerMangager.getCurrentPlayer());
+		scanner.close();
 	}
 
 	private boolean notGameOver() {
-		printBoard();
+		viewer.showBoard(board);
 
 		Move move = getNextMove();
 		doMove(move);
@@ -47,21 +58,16 @@ public class Game {
 
 	private Move getNextMove() {
 		Move move;
-		MoveValidator moveValidator = new MoveValidator(board);
-		toggleCurrentPlayer();
-		do {
-			System.out.println("Player " + (currentPlayer+1) + " (" + getColorByPlayer().toString() + "), it's your turn!");
-			System.out.println("Enter three coords, 1. current field, 2. field to move, 3. field to build. For example: (1,1),(1,2),(2,2)");
-			if (currentPlayer == 0)
-				move = player1.nextMove(board);
-			else
-				move = player2.nextMove(board);
-		} while (!moveValidator.isValid(move));
-		return move;
-	}
+		IPlayer currentPlayer;
 
-	private void toggleCurrentPlayer() {
-		currentPlayer = (currentPlayer++)%PLAYER_COUNT;
+		IMoveValidator moveValidator = new MoveValidator(new WorkerMoveValidator(board), new BuildMoveValidator(board));
+		playerMangager.next();
+		do {
+			currentPlayer = playerMangager.getCurrentPlayer();
+			viewer.showNextPlayer(currentPlayer);
+			move = currentPlayer.nextMove(board);
+		} while (!moveValidator.validate(currentPlayer, move));
+		return move;
 	}
 
 	private boolean isGameOver(Move move) {
@@ -69,7 +75,7 @@ public class Game {
 	}
 
 	private boolean isLastMove(Move move) {
-		// TODO should check if next player can move
+		// FIXME should check if next player can move
 		return false;
 	}
 
@@ -79,46 +85,8 @@ public class Game {
 
 	private void doMove(Move move) {
 		board.getField(move.getFrom()).setWorkerColor(Color.None);
-		board.getField(move.getTo()).setWorkerColor(getColorByPlayer());
+		board.getField(move.getTo()).setWorkerColor(playerMangager.getCurrentPlayer().getColor());
 		board.getField(move.getBuild()).setLevel(board.getField(move.getBuild()).getLevel() + 1);
 	}
-
-	private Color getColorByPlayer() {
-		if (currentPlayer == 1)
-			return Color.Blue;
-		else
-			return Color.White;
-	}
-
-	private void printBoard() {
-		printFirstLine();
-		for (int i = 0; i < Board.BOARDSIZE; i++) {
-			printLine(i);
-	    }
-	}
-
-	private void printLine(int i) {
-		StringBuilder line = new StringBuilder();
-		line.append(String.valueOf(i));
-
-		for (int j = 0; j < Board.BOARDSIZE; j++) {
-			line.append("| " + String.valueOf(board.getField(i, j).getLevel()));
-			if (board.getField(i, j).getWorkerColor() == Color.Blue)
-				line.append("b");
-			else if (board.getField(i, j).getWorkerColor() == Color.White)
-				line.append("w");
-			else
-				line.append(" ");
-		}
-		System.out.println(line.toString());
-		System.out.println("--------------------");
-	}
-
-	private void printFirstLine() {
-        System.out.println("   0   1   2   3   4");
-	}
-
-
-
 
 }

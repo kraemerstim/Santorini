@@ -3,17 +3,30 @@ package player;
 import java.util.Scanner;
 
 import board.Board;
-import board.Coords;
-import game.Move;
+import board.Color;
+import board.Coord;
+import move.Move;
 
 public class ConsolePlayer implements IPlayer {
 
+	private Color color;
+	private Scanner scanner;
+
+	public ConsolePlayer(Scanner scanner, Color color) {
+		super();
+		this.scanner = scanner;
+		this.color = color;
+	}
+
 	@Override
 	public Move nextMove(Board board) {
-		Scanner scanner = new Scanner(System.in);
 		String input = scanner.nextLine();
-		scanner.close();
 		return parseInput(input);
+	}
+
+	@Override
+	public Color getColor() {
+		return this.color;
 	}
 
 	private Move parseInput(String input) {
@@ -22,12 +35,11 @@ public class ConsolePlayer implements IPlayer {
 		inputString = inputString.replace(")", "");
 		String[] choords = inputString.split(",");
 
-		Move result = new Move();
-		result.setFrom(new Coords(Integer.valueOf(choords[0]), Integer.valueOf(choords[1])));
-		result.setTo(new Coords(Integer.valueOf(choords[2]), Integer.valueOf(choords[3])));
-		result.setBuild(new Coords(Integer.valueOf(choords[4]), Integer.valueOf(choords[5])));
+		Coord from = new Coord(Integer.valueOf(choords[0]), Integer.valueOf(choords[1]));
+		Coord to = new Coord(Integer.valueOf(choords[2]), Integer.valueOf(choords[3]));
+		Coord build = new Coord(Integer.valueOf(choords[4]), Integer.valueOf(choords[5]));
 
-		return result;
+		return new Move(from, to, build);
 	}
 
 
