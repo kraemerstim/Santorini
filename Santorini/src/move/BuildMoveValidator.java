@@ -20,7 +20,7 @@ public class BuildMoveValidator {
 	}
 
 	private boolean isPossibleBuildLevel(Coord build) {
-		return board.getField(build).getLevel() < (Board.BOARDSIZE - 1);
+		return board.getField(build).getLevel() < 4;
 	}
 
 }

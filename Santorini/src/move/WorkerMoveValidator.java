@@ -14,17 +14,17 @@ public class WorkerMoveValidator {
 	}
 
 	public boolean validate(IPlayer player, Move move) {
-		return checkWorkerColor(player.getColor(), move.getFrom())
-			&& areNeighbouringFields(move.getFrom(), move.getTo()) //
-			&& isFieldEmpty(move.getTo()) //
-			&& arePossibleMoveLevels(move.getFrom(), move.getTo());
+		return isWorkerColorMatching(player.getColor(), move.getFrom())
+			&& isFieldNeighbouring(move.getFrom(), move.getTo())
+			&& isFieldEmpty(move.getTo())
+			&& isPossibleMoveLevel(move.getFrom(), move.getTo());
 	}
 
-	private boolean checkWorkerColor(Color color, Coord from) {
+	private boolean isWorkerColorMatching(Color color, Coord from) {
 		return color.equals(board.getField(from).getWorkerColor());
 	}
 
-	private boolean areNeighbouringFields(Coord from, Coord to) {
+	private boolean isFieldNeighbouring(Coord from, Coord to) {
 		return from.isNeighbour(to);
 	}
 
@@ -32,9 +32,10 @@ public class WorkerMoveValidator {
 		return board.getField(coord).isEmpty();
 	}
 
-	private boolean arePossibleMoveLevels(Coord from, Coord to) {
-		return (board.getField(to).getLevel() < board.getField(from).getLevel()) ||
-			   (board.getField(to).getLevel() - board.getField(from).getLevel() <= 1);
+	private boolean isPossibleMoveLevel(Coord from, Coord to) {
+		return board.getField(to).getLevel() < 4
+		  && ((board.getField(to).getLevel() < board.getField(from).getLevel()) ||
+		      (board.getField(to).getLevel() - board.getField(from).getLevel() <= 1));
 	}
 
 }

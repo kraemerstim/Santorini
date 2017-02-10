@@ -22,7 +22,7 @@ public class Game {
 
 	private Board board;
 
-	private IPlayerManager playerMangager;
+	private IPlayerManager playerManager;
 	private IViewer viewer;
 
 	public Game() {
@@ -33,7 +33,7 @@ public class Game {
 		viewer = new ConsoleViewer();
 		//TODO scanner sollte nicht im Game sein sondern im ConsolePlayer
 		scanner = new Scanner(System.in);
-		playerMangager = new PlayerManager(new ConsolePlayer(scanner, Color.Blue), new ConsolePlayer(scanner, Color.White));
+		playerManager = new PlayerManager(new ConsolePlayer(scanner, Color.Blue), new ConsolePlayer(scanner, Color.White));
 
 		board = new Board();
 		//TODO bzw. die ganze Klasse ist eigentlich ein Testcase
@@ -45,7 +45,7 @@ public class Game {
 
 	public void start() {
 		while (notGameOver());
-		viewer.showWinner(playerMangager.getCurrentPlayer());
+		viewer.showWinner(playerManager.getCurrentPlayer());
 		scanner.close();
 	}
 
@@ -64,9 +64,9 @@ public class Game {
 		IPlayer currentPlayer;
 
 		IMoveValidator moveValidator = new MoveValidator(new WorkerMoveValidator(board), new BuildMoveValidator(board));
-		playerMangager.next();
+		playerManager.next();
 		do {
-			currentPlayer = playerMangager.getCurrentPlayer();
+			currentPlayer = playerManager.getCurrentPlayer();
 			viewer.showNextPlayer(currentPlayer);
 			move = currentPlayer.nextMove(board);
 		} while (!moveValidator.validate(currentPlayer, move));
@@ -88,7 +88,7 @@ public class Game {
 
 	private void doMove(Move move) {
 		board.getField(move.getFrom()).setWorkerColor(Color.None);
-		board.getField(move.getTo()).setWorkerColor(playerMangager.getCurrentPlayer().getColor());
+		board.getField(move.getTo()).setWorkerColor(playerManager.getCurrentPlayer().getColor());
 		board.getField(move.getBuild()).setLevel(board.getField(move.getBuild()).getLevel() + 1);
 	}
 

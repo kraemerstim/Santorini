@@ -56,7 +56,7 @@ public class Board {
 					count++;
 		return count;
 	}
-	
+
 	public void setBoardFromString(String position)
 	{
 		initBoard();
@@ -66,9 +66,11 @@ public class Board {
 			for (int j = 0; j < BOARDSIZE; j++)
 			{
 				c = position.charAt(index);
-				if (Character.isDigit(c));
+				if (Character.isDigit(c))
+				{
 					board[i][j].setLevel(c - '0');
 					index++;
+				}
 				c = position.charAt(index);
 				if (c == 'w')
 					board[i][j].setWorkerColor(Color.White);
@@ -78,19 +80,19 @@ public class Board {
 					index++;
 			}
 	}
-	
+
 	public String getBoardString()
 	{
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < BOARDSIZE; i++)
 			for (int j = 0; j < BOARDSIZE; j++)
 			{
-				result += Integer.toString(board[i][j].getLevel());
+				result.append(board[i][j].getLevel());
 				if (board[i][j].getWorkerColor() == Color.White)
-					result += "w";
+					result.append("w");
 				else if (board[i][j].getWorkerColor() == Color.Blue)
-					result += "b";
+					result.append("b");
 			}
-		return result;
+		return result.toString();
 	}
 }
