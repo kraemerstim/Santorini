@@ -27,20 +27,27 @@ public class InitTest {
 	}
 
 	@Test
-	public void setFirstWorkerProvidingWorkerOnField() throws Exception {
-		board.setWorker(new Coord(0, 0), Color.Blue);
-		assertEquals(Color.Blue, board.getField(0, 0).getWorkerColor());
-	}
-
-	@Test(expected = FieldAlreadyOccupiedException.class)
-	public void setSecondWorkerOnSameFieldShouldFail() throws Exception {
-		board.setWorker(new Coord(0, 0), Color.Blue);
-		board.setWorker(new Coord(0, 0), Color.White);
+	public void BoardReturnsExpectedStringRepresentations() throws Exception {
+		assertEquals("0000000000000000000000000", board.getBoardString());
+		board.setWorker(new Coord(3, 0), Color.Blue);
+		board.setWorker(new Coord(3, 3), Color.White);
+		assertEquals("0000000000000000b000w000000", board.getBoardString());
 	}
 
 	@Test
-	public void buildFirstBlockOnUnoccupiedSpaceShouldShowBlockOnField() throws Exception {
-
+	public void BoardIsCorrectSetByStringRepresentations() throws Exception {
+		board.setBoardFromString("1b2w34w000000000000000000003b");
+		assertEquals(board.getField(new Coord(0, 0)).getLevel(), 1);
+		assertEquals(board.getField(new Coord(0, 0)).getWorkerColor(), Color.Blue);
+		assertEquals(board.getField(new Coord(0, 1)).getLevel(), 2);
+		assertEquals(board.getField(new Coord(0, 1)).getWorkerColor(), Color.White);
 	}
 
+	@Test
+	public void cloningBoardReturningSameStringRepresentation() {
+		String s = "1b2w34w000000000000000000003b";
+		board.setBoardFromString(s);
+		Board clonedBoard = new Board(board);
+		assertEquals(s, clonedBoard.getBoardString());
+	}
 }

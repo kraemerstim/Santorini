@@ -6,7 +6,8 @@ import java.util.Scanner;
 import board.Board;
 import board.Color;
 import board.Coord;
-import board.Field;
+import board.CoordValidator;
+import board.ICoordValidator;
 import exceptions.NoWorkerOnFieldException;
 import exceptions.TooManySameColorWorkersOnBoardException;
 import move.BuildMoveValidator;
@@ -37,6 +38,7 @@ public class Game {
 	}
 
 	private void initGame() {
+		status = Status.preGame;
 		viewer = new ConsoleViewer();
 		// TODO scanner sollte nicht im Game sein sondern im ConsolePlayer
 		scanner = new Scanner(System.in);
@@ -44,24 +46,22 @@ public class Game {
 				new ConsolePlayer(scanner, Color.White));
 
 		board = new Board();
-
-		status = Status.preGame;
-
-		// TODO bzw. die ganze Klasse ist eigentlich ein Testcase
-		board.getField(1, 1).setWorkerColor(Color.Blue);
-		board.getField(2, 3).setWorkerColor(Color.Blue);
-		board.getField(1, 2).setWorkerColor(Color.White);
-		board.getField(3, 3).setWorkerColor(Color.White);
-		status = Status.GamePhase;
 	}
 
 	public void start() {
-		while (status == Status.GamePhase)
-			try {
+		status = Status.WorkerPlacementPhase;
+		while (status != Status.GameFinished && status != Status.GameAborted) {
+			switch (status) {
+			case WorkerPlacementPhase:
+				waitForNextWorkerPlacement();
+				break;
+			case GamePhase:
 				waitForNextMove();
-			} catch (NoWorkerOnFieldException e) {
-
+				break;
+			default:
+				break;
 			}
+		}
 		if (status == Status.GameFinished)
 			viewer.showWinner(playerManager.getCurrentPlayer());
 		scanner.close();
@@ -74,7 +74,7 @@ public class Game {
 		board.setWorker(coord, color);
 	}
 
-	private void waitForNextMove() throws NoWorkerOnFieldException {
+	private void waitForNextMove() {
 		viewer.showBoard(board);
 
 		Move move = getNextMove();
@@ -82,6 +82,44 @@ public class Game {
 
 		if (isGameOver(move))
 			status = Status.GameFinished;
+	}
+
+	private void waitForNextWorkerPlacement() {
+		viewer.showBoard(board);
+
+		Coord coord;
+		Color playerColor = playerManager.getCurrentPlayer().getColor();
+		while (board.getCoordsWithWorkers(playerColor).length < 2) {
+			try {
+				coord = getPlayerCoord();
+				setWorker(coord, playerColor);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		playerManager.next();
+
+		if (areAllWorkersSet())
+			status = Status.GamePhase;
+	}
+
+	private boolean areAllWorkersSet() {
+		int countBlue = board.getCoordsWithWorkers(Color.Blue).length;
+		int countWhite = board.getCoordsWithWorkers(Color.White).length;
+		return countBlue == 2 && countWhite == 2;
+	}
+
+	private Coord getPlayerCoord() {
+		Coord nextWorkerCoord;
+		IPlayer currentPlayer = playerManager.getCurrentPlayer();
+
+		ICoordValidator validator = new CoordValidator(board.getBoardSize());
+		do {
+			currentPlayer = playerManager.getCurrentPlayer();
+			viewer.showNextPlayerWorkerPlacement(currentPlayer);
+			nextWorkerCoord = playerManager.getCurrentPlayer().nextWorkerPlacement(board);
+		} while (!validator.equals(nextWorkerCoord));
+		return nextWorkerCoord;
 	}
 
 	private Move getNextMove() {
@@ -92,21 +130,25 @@ public class Game {
 		playerManager.next();
 		do {
 			currentPlayer = playerManager.getCurrentPlayer();
-			viewer.showNextPlayer(currentPlayer);
+			viewer.showNextPlayerMove(currentPlayer);
 			move = currentPlayer.nextMove(board);
 		} while (!moveValidator.validate(currentPlayer, move));
 		return move;
 	}
 
-	private boolean isGameOver(Move move) throws NoWorkerOnFieldException {
+	private boolean isGameOver(Move move) {
 		return (isWinningMove(move)) || (isLastMove(move));
 	}
 
-	private boolean isLastMove(Move move) throws NoWorkerOnFieldException {
+	private boolean isLastMove(Move move) {
 		int count = 0;
 		Coord[] coords = board.getCoordsWithWorkers(playerManager.getFollowingPlayer().getColor());
 		for (Coord coord : coords) {
-			count += getReachableCoords(coord).length;
+			try {
+				count += getReachableCoords(coord).length;
+			} catch (NoWorkerOnFieldException e) {
+
+			}
 		}
 		return count == 0;
 	}

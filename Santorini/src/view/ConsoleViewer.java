@@ -13,10 +13,17 @@ public class ConsoleViewer implements IViewer {
 	}
 
 	@Override
-	public void showNextPlayer(IPlayer player) {
+	public void showNextPlayerMove(IPlayer player) {
 		showMessage("Player " + player.getColor() + ", it's your turn!");
 		showMessage(
 				"Enter three coords, 1. current field, . field to move, 3. field to build. For example: (1,1),(1,2),(2,2)");
+	}
+
+	@Override
+	public void showNextPlayerWorkerPlacement(IPlayer player) {
+		showMessage("Player " + player.getColor() + ", it's your turn!");
+		showMessage(
+				"Enter a coord for the new worker as a two diget number. First diget for x, second for y. For example: 03");
 	}
 
 	@Override
@@ -54,5 +61,4 @@ public class ConsoleViewer implements IViewer {
 		showMessage(line.toString());
 		showMessage("--------------------");
 	}
-
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import exceptions.FieldAlreadyOccupiedException;
 import exceptions.MaxLevelAlreadyReachedException;
+import exceptions.NoWorkerOnFieldException;
 
 public class Board {
 
@@ -17,14 +18,17 @@ public class Board {
 
 	public Board(int size) {
 		boardSize = size;
+		board = new Field[boardSize][boardSize];
 		initBoard();
 	}
 
 	public Board(Board board) {
 		boardSize = board.getBoardSize();
+		this.board = new Field[boardSize][boardSize];
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++)
 				this.board[i][j] = new Field(board.getField(i, j));
+
 	}
 
 	public Field getField(int x, int y) {
@@ -45,17 +49,23 @@ public class Board {
 	}
 
 	private void initBoard() {
-		board = new Field[boardSize][boardSize];
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++)
 				board[i][j] = new Field();
 	}
 
-	public void setWorker(Coord fieldCoords, Color color) throws Exception {
+	public void setWorker(Coord fieldCoords, Color color) throws FieldAlreadyOccupiedException {
 		if (getField(fieldCoords).getWorkerColor() != Color.None)
 			throw new FieldAlreadyOccupiedException();
 
 		getField(fieldCoords).setWorkerColor(color);
+	}
+
+	public void removeWorker(Coord fieldCoords) throws NoWorkerOnFieldException {
+		if (getField(fieldCoords).getWorkerColor() == Color.None)
+			throw new NoWorkerOnFieldException();
+
+		getField(fieldCoords).setWorkerColor(Color.None);
 	}
 
 	public void setBlock(int x, int y) throws MaxLevelAlreadyReachedException, FieldAlreadyOccupiedException {
@@ -107,31 +117,17 @@ public class Board {
 	}
 
 	public boolean isBoardValid() {
-		int[] counts = new int[2];
 		Field field;
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++) {
 				field = getField(i, j);
 				if (field.getLevel() < 0 || field.getLevel() > 4)
 					return false;
-				switch (field.getWorkerColor()) {
-				case White:
-					counts[0]++;
-					break;
-				case Blue:
-					counts[1]++;
-					break;
-				default:
-				}
 			}
-		return (counts[0] == 2) && (counts[1] == 2);
+		return true;
 	}
 
 	public int getBoardSize() {
 		return boardSize;
-	}
-
-	public void setBoardSize(int boardSize) {
-		this.boardSize = boardSize;
 	}
 }

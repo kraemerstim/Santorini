@@ -5,6 +5,9 @@ import java.util.Scanner;
 import board.Board;
 import board.Color;
 import board.Coord;
+import board.CoordValidator;
+import board.ICoordValidator;
+import exceptions.InvalidInputException;
 import move.Move;
 
 public class ConsolePlayer implements IPlayer {
@@ -21,7 +24,7 @@ public class ConsolePlayer implements IPlayer {
 	@Override
 	public Move nextMove(Board board) {
 		String input = scanner.nextLine();
-		return parseInput(input);
+		return parseInputIntoMove(input);
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class ConsolePlayer implements IPlayer {
 		return this.color;
 	}
 
-	private Move parseInput(String input) {
+	private Move parseInputIntoMove(String input) {
 		String inputString = input;
 		inputString = inputString.replace("(", "");
 		inputString = inputString.replace(")", "");
@@ -40,6 +43,28 @@ public class ConsolePlayer implements IPlayer {
 		Coord build = new Coord(Integer.valueOf(choords[4]), Integer.valueOf(choords[5]));
 
 		return new Move(from, to, build);
+	}
+
+	@Override
+	public Coord nextWorkerPlacement(Board board) {
+		String input = scanner.nextLine();
+		Coord returnCoord = null;
+		while (returnCoord == null) {
+			try {
+				returnCoord = parseInputIntoCoord(input);
+			} catch (InvalidInputException e) {
+				returnCoord = null;
+			}
+		}
+		return returnCoord;
+	}
+
+	private Coord parseInputIntoCoord(String input) throws InvalidInputException {
+		if (input.length() != 2)
+			throw new InvalidInputException();
+
+		char[] characters = input.toCharArray();
+		return new Coord(Character.getNumericValue(characters[0]), Character.getNumericValue(characters[1]));
 	}
 
 }
