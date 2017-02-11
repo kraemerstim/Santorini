@@ -1,5 +1,7 @@
 package player;
 
+import board.Color;
+
 public class PlayerManager implements IPlayerManager {
 
 	private IPlayer player1;
@@ -14,15 +16,24 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public void next() {
-		if (currentPlayer == player1)
-			currentPlayer = player2;
-		else
-			currentPlayer = player1;
+		currentPlayer = getFollowingPlayer();
 	}
 
 	@Override
 	public IPlayer getCurrentPlayer() {
 		return currentPlayer;
+	}
+
+	@Override
+	public IPlayer getFollowingPlayer() {
+		if (currentPlayer == player1)
+			return player2;
+		return player1;
+	}
+
+	@Override
+	public IPlayer getPlayerByColor(Color color) {
+		return player1.getColor() == color ? player1 : player2;
 	}
 
 }

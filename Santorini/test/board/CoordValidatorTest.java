@@ -16,19 +16,19 @@ public class CoordValidatorTest {
 
 	@Test
 	public void validate_withNegativeCoord_ShouldBeInvalid() {
-		Coord coord = new Coord(-1,0);
+		Coord coord = new Coord(-1, 0);
 		assertFalse(validator.validate(coord));
 	}
 
 	@Test
 	public void validate_withZeroCoord_ShouldBeValid() {
-		Coord coord = new Coord(0,0);
+		Coord coord = new Coord(0, 0);
 		assertTrue(validator.validate(coord));
 	}
 
 	@Test
 	public void validate_withBoardsizeCoord_ShouldBeInvalid() {
-		Coord coord = new Coord(5,5);
+		Coord coord = new Coord(5, 5);
 		assertFalse(validator.validate(coord));
 	}
 

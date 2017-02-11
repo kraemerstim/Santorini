@@ -10,6 +10,11 @@ public class Field {
 		level = 0;
 	}
 
+	public Field(Field field) {
+		setLevel(field.getLevel());
+		setWorkerColor(field.getWorkerColor());
+	}
+
 	public int getLevel() {
 		return level;
 	}

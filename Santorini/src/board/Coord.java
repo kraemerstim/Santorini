@@ -2,13 +2,13 @@ package board;
 
 public class Coord {
 	private int x;
-    private int y;
+	private int y;
 
-    public Coord(int x, int y) {
-        super();
-        this.x = x;
-        this.y = y;
-    }
+	public Coord(int x, int y) {
+		super();
+		this.x = x;
+		this.y = y;
+	}
 
 	public int getX() {
 		return x;
@@ -21,12 +21,14 @@ public class Coord {
 	public int getY() {
 		return y;
 	}
+
 	public void setY(int y) {
 		this.y = y;
 	}
 
 	public boolean isNeighbour(Coord coords) {
-		return !equals(coords) && Math.abs(this.getX() - coords.getX()) <= 1 && Math.abs(this.getY() - coords.getY()) <= 1;
+		return !equals(coords) && Math.abs(this.getX() - coords.getX()) <= 1
+				&& Math.abs(this.getY() - coords.getY()) <= 1;
 	}
 
 	@Override
@@ -53,5 +55,4 @@ public class Coord {
 			return false;
 		return true;
 	}
-
 }

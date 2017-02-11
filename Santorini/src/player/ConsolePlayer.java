@@ -42,6 +42,4 @@ public class ConsolePlayer implements IPlayer {
 		return new Move(from, to, build);
 	}
 
-
-
 }

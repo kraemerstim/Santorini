@@ -16,5 +16,4 @@ public class MoveValidator implements IMoveValidator {
 	public boolean validate(IPlayer player, Move move) {
 		return workerMoveValdidator.validate(player, move) && buildMoveValidator.validate(move);
 	}
-
 }

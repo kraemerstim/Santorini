@@ -6,8 +6,8 @@ import move.Move;
 
 public interface IPlayer {
 
-	Move nextMove(Board board);
+	public Move nextMove(Board board);
 
-	Color getColor();
+	public Color getColor();
 
 }

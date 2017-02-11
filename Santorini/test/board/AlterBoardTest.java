@@ -16,7 +16,7 @@ public class AlterBoardTest {
 	public void setup() {
 		board = new Board();
 	}
-	
+
 	@Ignore
 	public void test() {
 		fail("Not yet implemented");

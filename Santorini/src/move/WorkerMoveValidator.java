@@ -15,9 +15,8 @@ public class WorkerMoveValidator {
 
 	public boolean validate(IPlayer player, Move move) {
 		return isWorkerColorMatching(player.getColor(), move.getFrom())
-			&& isFieldNeighbouring(move.getFrom(), move.getTo())
-			&& isFieldEmpty(move.getTo())
-			&& isPossibleMoveLevel(move.getFrom(), move.getTo());
+				&& isFieldNeighbouring(move.getFrom(), move.getTo()) && isFieldEmpty(move.getTo())
+				&& isPossibleMoveLevel(move.getFrom(), move.getTo());
 	}
 
 	private boolean isWorkerColorMatching(Color color, Coord from) {
@@ -33,9 +32,8 @@ public class WorkerMoveValidator {
 	}
 
 	private boolean isPossibleMoveLevel(Coord from, Coord to) {
-		return board.getField(to).getLevel() < 4
-		  && ((board.getField(to).getLevel() < board.getField(from).getLevel()) ||
-		      (board.getField(to).getLevel() - board.getField(from).getLevel() <= 1));
+		return board.getField(to).getLevel() < 4 && ((board.getField(to).getLevel() < board.getField(from).getLevel())
+				|| (board.getField(to).getLevel() - board.getField(from).getLevel() <= 1));
 	}
 
 }
