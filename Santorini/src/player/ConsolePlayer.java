@@ -8,7 +8,7 @@ import board.Coord;
 import board.CoordValidator;
 import board.ICoordValidator;
 import exceptions.InvalidInputException;
-import move.Move;
+import move.BuildMove;
 
 public class ConsolePlayer implements IPlayer {
 
@@ -22,7 +22,7 @@ public class ConsolePlayer implements IPlayer {
 	}
 
 	@Override
-	public Move nextMove(Board board) {
+	public BuildMove nextMove(Board board) {
 		String input = scanner.nextLine();
 		return parseInputIntoMove(input);
 	}
@@ -32,17 +32,16 @@ public class ConsolePlayer implements IPlayer {
 		return this.color;
 	}
 
-	private Move parseInputIntoMove(String input) {
+	private BuildMove parseInputIntoMove(String input) {
 		String inputString = input;
 		inputString = inputString.replace("(", "");
 		inputString = inputString.replace(")", "");
 		String[] choords = inputString.split(",");
 
 		Coord from = new Coord(Integer.valueOf(choords[0]), Integer.valueOf(choords[1]));
-		Coord to = new Coord(Integer.valueOf(choords[2]), Integer.valueOf(choords[3]));
-		Coord build = new Coord(Integer.valueOf(choords[4]), Integer.valueOf(choords[5]));
+		Coord build = new Coord(Integer.valueOf(choords[2]), Integer.valueOf(choords[3]));
 
-		return new Move(from, to, build);
+		return new BuildMove(from, build);
 	}
 
 	@Override

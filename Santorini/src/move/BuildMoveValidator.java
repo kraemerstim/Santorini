@@ -11,14 +11,12 @@ public class BuildMoveValidator {
 		this.board = board;
 	}
 
-	public boolean validate(Move move) {
-		return move.getTo().isNeighbour(move.getBuild()) && isPossibleBuildField(move)
-				&& isPossibleBuildLevel(move.getBuild());
+	public boolean validate(BuildMove move) {
+		return isPossibleBuildField(move) && isPossibleBuildLevel(move.getBuild());
 	}
 
-	private boolean isPossibleBuildField(Move move) {
-		return board.getField(move.getBuild()).isEmpty()
-				&& (!move.getTo().equals(move.getBuild()) || (move.getFrom().equals(move.getBuild())));
+	private boolean isPossibleBuildField(BuildMove move) {
+		return board.getField(move.getBuild()).isEmpty() && (move.getWorker().isNeighbour(move.getBuild()));
 	}
 
 	private boolean isPossibleBuildLevel(Coord build) {

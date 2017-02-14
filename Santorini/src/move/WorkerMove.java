@@ -2,17 +2,14 @@ package move;
 
 import board.Coord;
 
-public class Move {
-
+public class WorkerMove {
 	private Coord from;
 	private Coord to;
-	private Coord build;
 
-	public Move(Coord from, Coord to, Coord build) {
+	public WorkerMove(Coord from, Coord to) {
 		super();
 		this.from = from;
 		this.to = to;
-		this.build = build;
 	}
 
 	public Coord getFrom() {
@@ -29,13 +26,5 @@ public class Move {
 
 	public void setTo(Coord to) {
 		this.to = to;
-	}
-
-	public Coord getBuild() {
-		return build;
-	}
-
-	public void setBuild(Coord build) {
-		this.build = build;
 	}
 }

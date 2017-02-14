@@ -3,11 +3,11 @@ package player;
 import board.Board;
 import board.Color;
 import board.Coord;
-import move.Move;
+import move.BuildMove;
 
 public interface IPlayer {
 
-	public Move nextMove(Board board);
+	public BuildMove nextMove(Board board);
 
 	public Coord nextWorkerPlacement(Board board);
 

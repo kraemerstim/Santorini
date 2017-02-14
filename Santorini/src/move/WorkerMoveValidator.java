@@ -13,7 +13,7 @@ public class WorkerMoveValidator {
 		this.board = board;
 	}
 
-	public boolean validate(IPlayer player, Move move) {
+	public boolean validate(IPlayer player, WorkerMove move) {
 		return isWorkerColorMatching(player.getColor(), move.getFrom())
 				&& isFieldNeighbouring(move.getFrom(), move.getTo()) && isFieldEmpty(move.getTo())
 				&& isPossibleMoveLevel(move.getFrom(), move.getTo());

@@ -11,8 +11,9 @@ import board.ICoordValidator;
 import exceptions.NoWorkerOnFieldException;
 import exceptions.TooManySameColorWorkersOnBoardException;
 import move.BuildMoveValidator;
-import move.Move;
+import move.BuildMove;
 import move.MoveValidator;
+import move.WorkerMove;
 import move.IMoveValidator;
 import move.WorkerMoveValidator;
 import player.IPlayer;
@@ -77,10 +78,12 @@ public class Game {
 	private void waitForNextMove() {
 		viewer.showBoard(board);
 
-		Move move = getNextMove();
-		doMove(move);
+		WorkerMove workerMove = getNextWorkerMove();
+		doMove(workerMove);
+		BuildMove buildMove = getNextBuildMove();
+		doMove(buildMove);
 
-		if (isGameOver(move))
+		if (isGameOver(workerMove))
 			status = Status.GameFinished;
 	}
 
@@ -122,25 +125,39 @@ public class Game {
 		return nextWorkerCoord;
 	}
 
-	private Move getNextMove() {
-		Move move;
+	private WorkerMove getNextWorkerMove() {
+		WorkerMove move;
 		IPlayer currentPlayer;
 
-		IMoveValidator moveValidator = new MoveValidator(new WorkerMoveValidator(board), new BuildMoveValidator(board));
+		WorkerMoveValidator moveValidator = new WorkerMoveValidator(board);
 		playerManager.next();
 		do {
 			currentPlayer = playerManager.getCurrentPlayer();
 			viewer.showNextPlayerMove(currentPlayer);
-			move = currentPlayer.nextMove(board);
+			move = currentPlayer.nextWorkerMove(board);
 		} while (!moveValidator.validate(currentPlayer, move));
 		return move;
 	}
+	
+	private BuildMove getBuildeNextMove() {
+		BuildMove move;
+		IPlayer currentPlayer;
 
-	private boolean isGameOver(Move move) {
-		return (isWinningMove(move)) || (isLastMove(move));
+		BuildMoveValidator buildMoveValidator = new BuildMoveValidator(board);
+		playerManager.next();
+		do {
+			currentPlayer = playerManager.getCurrentPlayer();
+			viewer.showNextPlayerMove(currentPlayer);
+			move = currentPlayer.nextBuildMove(board);
+		} while (!buildMoveValidator.validate(move));
+		return move;
 	}
 
-	private boolean isLastMove(Move move) {
+	private boolean isGameOver(WorkerMove move) {
+		return (isWinningMove(move)) || (isLastMove());
+	}
+
+	private boolean isLastMove() {
 		int count = 0;
 		Coord[] coords = board.getCoordsWithWorkers(playerManager.getFollowingPlayer().getColor());
 		for (Coord coord : coords) {
@@ -167,20 +184,23 @@ public class Game {
 						|| newY < 0)
 					continue;
 				Coord reachableCoord = new Coord(fromCoord.getX() + i, fromCoord.getY() + j);
-				if (validator.validate(player, new Move(fromCoord, new Coord(newX, newY), fromCoord)))
+				if (validator.validate(player, new WorkerMove(fromCoord, new Coord(newX, newY))))
 					coords.add(reachableCoord);
 			}
 		}
 		return coords.toArray(new Coord[coords.size()]);
 	}
 
-	private boolean isWinningMove(Move move) {
+	private boolean isWinningMove(WorkerMove move) {
 		return (board.getField(move.getFrom()).getLevel() == 2) && (board.getField(move.getTo()).getLevel() == 3);
 	}
 
-	private void doMove(Move move) {
+	private void doMove(WorkerMove move) {
 		board.getField(move.getFrom()).setWorkerColor(Color.None);
 		board.getField(move.getTo()).setWorkerColor(playerManager.getCurrentPlayer().getColor());
+	}
+	
+	private void doMove(BuildMove move) {
 		board.getField(move.getBuild()).setLevel(board.getField(move.getBuild()).getLevel() + 1);
 	}
 
