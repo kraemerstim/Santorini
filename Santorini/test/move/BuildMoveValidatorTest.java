@@ -20,7 +20,7 @@ public class BuildMoveValidatorTest {
 	@Test
 	public void validate_withEmptyBoard_shouldBeValid() {
 		BuildMoveValidator validator = new BuildMoveValidator(board);
-		BuildMove move = new BuildMove(new Coord(0, 0), new Coord(0, 0), new Coord(0, 1));
+		BuildMove move = new BuildMove(new Coord(0, 0), new Coord(0, 1));
 		assertTrue(validator.validate(move));
 	}
 

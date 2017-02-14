@@ -5,9 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import exceptions.FieldAlreadyOccupiedException;
-import exceptions.TooManySameColorWorkersOnBoardException;
-
 public class InitTest {
 
 	private Board board;
@@ -27,7 +24,7 @@ public class InitTest {
 	}
 
 	@Test
-	public void BoardReturnsExpectedStringRepresentations() throws Exception {
+	public void boardReturnsExpectedStringRepresentations() throws Exception {
 		assertEquals("0000000000000000000000000", board.getBoardString());
 		board.setWorker(new Coord(3, 0), Color.Blue);
 		board.setWorker(new Coord(3, 3), Color.White);
@@ -35,7 +32,7 @@ public class InitTest {
 	}
 
 	@Test
-	public void BoardIsCorrectSetByStringRepresentations() throws Exception {
+	public void boardIsCorrectSetByStringRepresentations() throws Exception {
 		board.setBoardFromString("1b2w34w000000000000000000003b");
 		assertEquals(board.getField(new Coord(0, 0)).getLevel(), 1);
 		assertEquals(board.getField(new Coord(0, 0)).getWorkerColor(), Color.Blue);

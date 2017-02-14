@@ -13,7 +13,7 @@ public class MoveValidator implements IMoveValidator {
 	}
 
 	@Override
-	public boolean validate(IPlayer player, BuildMove move) {
-		return workerMoveValdidator.validate(player, move) && buildMoveValidator.validate(move);
+	public boolean validate(IPlayer player, WorkerMove workerMove, BuildMove buildMove) {
+		return workerMoveValdidator.validate(player, workerMove) && buildMoveValidator.validate(buildMove);
 	}
 }

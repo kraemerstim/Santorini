@@ -13,10 +13,17 @@ public class ConsoleViewer implements IViewer {
 	}
 
 	@Override
-	public void showNextPlayerMove(IPlayer player) {
+	public void showNextWorkerMove(IPlayer player) {
 		showMessage("Player " + player.getColor() + ", it's your turn!");
 		showMessage(
-				"Enter three coords, 1. current field, . field to move, 3. field to build. For example: (1,1),(1,2),(2,2)");
+				"Enter two coords for the worker move. First coord for the current position, second for the new position. For example: 1112");
+	}
+
+	@Override
+	public void showNextBuildMove(IPlayer player) {
+		showMessage("Player " + player.getColor() + ", it's your turn!");
+		showMessage(
+				"Enter two coords for the build move. First coord for the worker position, second for the build position. For example: 1222");
 	}
 
 	@Override
@@ -41,19 +48,19 @@ public class ConsoleViewer implements IViewer {
 
 	private void printBoard(Board board) {
 		for (int i = 0; i < board.getBoardSize(); i++) {
-			printBoardColumn(board, i);
+			printBoardRow(board, i);
 		}
 	}
 
-	private void printBoardColumn(Board board, int i) {
+	private void printBoardRow(Board board, int i) {
 		StringBuilder line = new StringBuilder();
 		line.append(String.valueOf(i));
 
 		for (int j = 0; j < board.getBoardSize(); j++) {
-			line.append("| " + String.valueOf(board.getField(i, j).getLevel()));
-			if (board.getField(i, j).getWorkerColor() == Color.Blue)
+			line.append("| " + String.valueOf(board.getField(j, i).getLevel()));
+			if (board.getField(j, i).getWorkerColor() == Color.Blue)
 				line.append("b");
-			else if (board.getField(i, j).getWorkerColor() == Color.White)
+			else if (board.getField(j, i).getWorkerColor() == Color.White)
 				line.append("w");
 			else
 				line.append(" ");

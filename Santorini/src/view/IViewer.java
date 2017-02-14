@@ -7,7 +7,8 @@ public interface IViewer {
 
 	public void showBoard(Board board);
 
-	public void showNextPlayerMove(IPlayer player);
+	public void showNextWorkerMove(IPlayer player);
+	public void showNextBuildMove(IPlayer player);
 
 	public void showNextPlayerWorkerPlacement(IPlayer player);
 

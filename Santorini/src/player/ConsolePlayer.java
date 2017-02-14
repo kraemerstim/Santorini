@@ -5,10 +5,9 @@ import java.util.Scanner;
 import board.Board;
 import board.Color;
 import board.Coord;
-import board.CoordValidator;
-import board.ICoordValidator;
 import exceptions.InvalidInputException;
 import move.BuildMove;
+import move.WorkerMove;
 
 public class ConsolePlayer implements IPlayer {
 
@@ -22,9 +21,17 @@ public class ConsolePlayer implements IPlayer {
 	}
 
 	@Override
-	public BuildMove nextMove(Board board) {
+	public WorkerMove nextWorkerMove(Board board) {
 		String input = scanner.nextLine();
-		return parseInputIntoMove(input);
+		Coord[] coords = parseInputIntoCoords(input);
+		return new WorkerMove(coords[0], coords[1]);
+	}
+
+	@Override
+	public BuildMove nextBuildMove(Board board) {
+		String input = scanner.nextLine();
+		Coord[] coords = parseInputIntoCoords(input);
+		return new BuildMove(coords[0], coords[1]);
 	}
 
 	@Override
@@ -32,16 +39,11 @@ public class ConsolePlayer implements IPlayer {
 		return this.color;
 	}
 
-	private BuildMove parseInputIntoMove(String input) {
-		String inputString = input;
-		inputString = inputString.replace("(", "");
-		inputString = inputString.replace(")", "");
-		String[] choords = inputString.split(",");
-
-		Coord from = new Coord(Integer.valueOf(choords[0]), Integer.valueOf(choords[1]));
-		Coord build = new Coord(Integer.valueOf(choords[2]), Integer.valueOf(choords[3]));
-
-		return new BuildMove(from, build);
+	private Coord[] parseInputIntoCoords(String input) {
+		Coord[] result = new Coord[2];
+		result[0] = new Coord(Integer.valueOf(input.substring(0,1)), Integer.valueOf(input.substring(1,2)));
+		result[1] = new Coord(Integer.valueOf(input.substring(2,3)), Integer.valueOf(input.substring(3,4)));
+		return result;
 	}
 
 	@Override

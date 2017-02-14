@@ -20,7 +20,7 @@ public class WorkerMoveValidatorTest {
 	@Test
 	public void validate_withInvalidCoords_shouldBeInvalid() {
 		BuildMoveValidator validator = new BuildMoveValidator(board);
-		BuildMove move = new BuildMove(new Coord(0, 0), new Coord(0, 2), new Coord(0, 0));
+		BuildMove move = new BuildMove(new Coord(0, 0), new Coord(0, 2));
 		assertFalse(validator.validate(move));
 	}
 

@@ -12,9 +12,7 @@ import exceptions.NoWorkerOnFieldException;
 import exceptions.TooManySameColorWorkersOnBoardException;
 import move.BuildMoveValidator;
 import move.BuildMove;
-import move.MoveValidator;
 import move.WorkerMove;
-import move.IMoveValidator;
 import move.WorkerMoveValidator;
 import player.IPlayer;
 import player.IPlayerManager;
@@ -76,12 +74,16 @@ public class Game {
 	}
 
 	private void waitForNextMove() {
-		viewer.showBoard(board);
 
+		viewer.showBoard(board);
 		WorkerMove workerMove = getNextWorkerMove();
 		doMove(workerMove);
+
+		viewer.showBoard(board);
 		BuildMove buildMove = getNextBuildMove();
 		doMove(buildMove);
+
+		playerManager.next();
 
 		if (isGameOver(workerMove))
 			status = Status.GameFinished;
@@ -121,33 +123,29 @@ public class Game {
 			currentPlayer = playerManager.getCurrentPlayer();
 			viewer.showNextPlayerWorkerPlacement(currentPlayer);
 			nextWorkerCoord = playerManager.getCurrentPlayer().nextWorkerPlacement(board);
-		} while (!validator.equals(nextWorkerCoord));
+		} while (!validator.validate(nextWorkerCoord));
 		return nextWorkerCoord;
 	}
 
 	private WorkerMove getNextWorkerMove() {
 		WorkerMove move;
-		IPlayer currentPlayer;
+		IPlayer currentPlayer = playerManager.getCurrentPlayer();
 
 		WorkerMoveValidator moveValidator = new WorkerMoveValidator(board);
-		playerManager.next();
 		do {
-			currentPlayer = playerManager.getCurrentPlayer();
-			viewer.showNextPlayerMove(currentPlayer);
+			viewer.showNextWorkerMove(currentPlayer);
 			move = currentPlayer.nextWorkerMove(board);
 		} while (!moveValidator.validate(currentPlayer, move));
 		return move;
 	}
-	
-	private BuildMove getBuildeNextMove() {
+
+	private BuildMove getNextBuildMove() {
 		BuildMove move;
-		IPlayer currentPlayer;
+		IPlayer currentPlayer = playerManager.getCurrentPlayer();
 
 		BuildMoveValidator buildMoveValidator = new BuildMoveValidator(board);
-		playerManager.next();
 		do {
-			currentPlayer = playerManager.getCurrentPlayer();
-			viewer.showNextPlayerMove(currentPlayer);
+			viewer.showNextBuildMove(currentPlayer);
 			move = currentPlayer.nextBuildMove(board);
 		} while (!buildMoveValidator.validate(move));
 		return move;
@@ -199,7 +197,7 @@ public class Game {
 		board.getField(move.getFrom()).setWorkerColor(Color.None);
 		board.getField(move.getTo()).setWorkerColor(playerManager.getCurrentPlayer().getColor());
 	}
-	
+
 	private void doMove(BuildMove move) {
 		board.getField(move.getBuild()).setLevel(board.getField(move.getBuild()).getLevel() + 1);
 	}
