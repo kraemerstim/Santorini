@@ -1,7 +1,6 @@
 package game;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import board.Board;
 import board.Color;
@@ -22,9 +21,6 @@ import view.IViewer;
 import player.ConsolePlayer;
 
 public class Game {
-
-	private Scanner scanner;
-
 	private Board board;
 
 	private IPlayerManager playerManager;
@@ -39,10 +35,7 @@ public class Game {
 	private void initGame() {
 		status = Status.preGame;
 		viewer = new ConsoleViewer();
-		// TODO scanner sollte nicht im Game sein sondern im ConsolePlayer
-		scanner = new Scanner(System.in);
-		playerManager = new PlayerManager(new ConsolePlayer(scanner, Color.Blue),
-				new ConsolePlayer(scanner, Color.White));
+		playerManager = new PlayerManager(new ConsolePlayer(Color.Blue), new ConsolePlayer(Color.White));
 
 		board = new Board();
 	}
@@ -63,7 +56,6 @@ public class Game {
 		}
 		if (status == Status.GameFinished)
 			viewer.showWinner(playerManager.getCurrentPlayer());
-		scanner.close();
 	}
 
 	public void setWorker(Coord coord, Color color) throws Exception {
@@ -79,14 +71,16 @@ public class Game {
 		WorkerMove workerMove = getNextWorkerMove();
 		doMove(workerMove);
 
+		if (isGameOver(workerMove)) {
+			status = Status.GameFinished;
+			return;
+		}
+
 		viewer.showBoard(board);
 		BuildMove buildMove = getNextBuildMove();
 		doMove(buildMove);
 
 		playerManager.next();
-
-		if (isGameOver(workerMove))
-			status = Status.GameFinished;
 	}
 
 	private void waitForNextWorkerPlacement() {
@@ -99,7 +93,7 @@ public class Game {
 				coord = getPlayerCoord();
 				setWorker(coord, playerColor);
 			} catch (Exception e) {
-				e.printStackTrace();
+				viewer.showMessage(e.toString());
 			}
 		}
 		playerManager.next();
@@ -128,26 +122,37 @@ public class Game {
 	}
 
 	private WorkerMove getNextWorkerMove() {
-		WorkerMove move;
+		WorkerMove move = null;
+		boolean validMove = false;
 		IPlayer currentPlayer = playerManager.getCurrentPlayer();
 
 		WorkerMoveValidator moveValidator = new WorkerMoveValidator(board);
-		do {
+
+		while (!validMove) {
 			viewer.showNextWorkerMove(currentPlayer);
 			move = currentPlayer.nextWorkerMove(board);
-		} while (!moveValidator.validate(currentPlayer, move));
+			validMove = moveValidator.validate(currentPlayer, move);
+			if (!validMove)
+				viewer.showMessage("This was not a valid worker move");
+		}
 		return move;
 	}
 
 	private BuildMove getNextBuildMove() {
-		BuildMove move;
+		BuildMove move = null;
+		boolean validMove = false;
+		;
 		IPlayer currentPlayer = playerManager.getCurrentPlayer();
 
 		BuildMoveValidator buildMoveValidator = new BuildMoveValidator(board);
-		do {
-			viewer.showNextBuildMove(currentPlayer);
+
+		while (!validMove) {
+			viewer.showNextWorkerMove(currentPlayer);
 			move = currentPlayer.nextBuildMove(board);
-		} while (!buildMoveValidator.validate(move));
+			validMove = buildMoveValidator.validate(move);
+			if (!validMove)
+				viewer.showMessage("This was not a valid build move");
+		}
 		return move;
 	}
 

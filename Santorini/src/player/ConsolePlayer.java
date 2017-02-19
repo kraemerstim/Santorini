@@ -12,25 +12,50 @@ import move.WorkerMove;
 public class ConsolePlayer implements IPlayer {
 
 	private Color color;
-	private Scanner scanner;
+	private static Scanner scanner;
 
-	public ConsolePlayer(Scanner scanner, Color color) {
+	private static Scanner getScanner() {
+		if (scanner == null)
+			scanner = new Scanner(System.in);
+		return scanner;
+	}
+
+	public ConsolePlayer(Color color) {
 		super();
-		this.scanner = scanner;
 		this.color = color;
 	}
 
 	@Override
 	public WorkerMove nextWorkerMove(Board board) {
-		String input = scanner.nextLine();
-		Coord[] coords = parseInputIntoCoords(input);
+		showMessage("Enter two coords for the worker move seperated by a '-'. First coord for the current position,"
+				+ " second for the new position. For example: a1-b2");
+		String input = getScanner().nextLine();
+		Coord[] coords = null;
+		while (coords == null) {
+			try {
+				coords = parseInputIntoCoords(input);
+			} catch (InvalidInputException e) {
+				showMessage(input + " is no valid move!");
+				coords = null;
+			}
+		}
 		return new WorkerMove(coords[0], coords[1]);
 	}
 
 	@Override
 	public BuildMove nextBuildMove(Board board) {
-		String input = scanner.nextLine();
-		Coord[] coords = parseInputIntoCoords(input);
+		Coord[] coords = null;
+		while (coords == null) {
+			showMessage("Enter two coords for the build move seperated by a '-'. First coord for the worker position,"
+					+ " second for the build position. For example: a2-b3");
+			String input = getScanner().nextLine();
+			try {
+				coords = parseInputIntoCoords(input);
+			} catch (InvalidInputException e) {
+				showMessage(input + " is no valid move!");
+				coords = null;
+			}
+		}
 		return new BuildMove(coords[0], coords[1]);
 	}
 
@@ -39,21 +64,27 @@ public class ConsolePlayer implements IPlayer {
 		return this.color;
 	}
 
-	private Coord[] parseInputIntoCoords(String input) {
+	private Coord[] parseInputIntoCoords(String input) throws InvalidInputException {
+		if (input.length() != 5)
+			throw new InvalidInputException();
+
 		Coord[] result = new Coord[2];
-		result[0] = new Coord(Integer.valueOf(input.substring(0,1)), Integer.valueOf(input.substring(1,2)));
-		result[1] = new Coord(Integer.valueOf(input.substring(2,3)), Integer.valueOf(input.substring(3,4)));
+		result[0] = parseInputIntoCoord(input.substring(0, 2));
+		result[1] = parseInputIntoCoord(input.substring(3, 5));
 		return result;
 	}
 
 	@Override
 	public Coord nextWorkerPlacement(Board board) {
-		String input = scanner.nextLine();
 		Coord returnCoord = null;
 		while (returnCoord == null) {
+			showMessage("Enter a coord for the new worker as two characters for the row and the column. "
+					+ "First character for row, second for column. For example: c5");
+			String input = getScanner().nextLine();
 			try {
 				returnCoord = parseInputIntoCoord(input);
 			} catch (InvalidInputException e) {
+				showMessage(input + " is no valid coord!");
 				returnCoord = null;
 			}
 		}
@@ -64,8 +95,15 @@ public class ConsolePlayer implements IPlayer {
 		if (input.length() != 2)
 			throw new InvalidInputException();
 
-		char[] characters = input.toCharArray();
-		return new Coord(Character.getNumericValue(characters[0]), Character.getNumericValue(characters[1]));
+		char[] characters = input.toLowerCase().toCharArray();
+		if (characters[0] < 'a' || characters[0] > 'e' || Character.getNumericValue(characters[1]) < 1
+				|| Character.getNumericValue(characters[1]) > 5)
+			throw new InvalidInputException();
+		return new Coord((characters[0] - 'a'), Character.getNumericValue(characters[1]) - 1);
+	}
+
+	private void showMessage(String message) {
+		System.out.println(message);
 	}
 
 }

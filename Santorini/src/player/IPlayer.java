@@ -9,6 +9,7 @@ import move.WorkerMove;
 public interface IPlayer {
 
 	public BuildMove nextBuildMove(Board board);
+
 	public WorkerMove nextWorkerMove(Board board);
 
 	public Coord nextWorkerPlacement(Board board);
