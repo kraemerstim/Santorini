@@ -35,7 +35,7 @@ public class ConsolePlayer implements IPlayer {
 			try {
 				coords = parseInputIntoCoords(input);
 			} catch (InvalidInputException e) {
-				showMessage(input + " is no valid move!");
+				showMessage(input + " is not a valid move!");
 				coords = null;
 			}
 		}
@@ -52,7 +52,7 @@ public class ConsolePlayer implements IPlayer {
 			try {
 				coords = parseInputIntoCoords(input);
 			} catch (InvalidInputException e) {
-				showMessage(input + " is no valid move!");
+				showMessage(input + " is not a valid move!");
 				coords = null;
 			}
 		}
@@ -84,7 +84,7 @@ public class ConsolePlayer implements IPlayer {
 			try {
 				returnCoord = parseInputIntoCoord(input);
 			} catch (InvalidInputException e) {
-				showMessage(input + " is no valid coord!");
+				showMessage(input + " is not a valid coord!");
 				returnCoord = null;
 			}
 		}
