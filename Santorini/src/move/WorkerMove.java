@@ -16,15 +16,8 @@ public class WorkerMove {
 		return from;
 	}
 
-	public void setFrom(Coord from) {
-		this.from = from;
-	}
-
 	public Coord getTo() {
 		return to;
 	}
 
-	public void setTo(Coord to) {
-		this.to = to;
-	}
 }

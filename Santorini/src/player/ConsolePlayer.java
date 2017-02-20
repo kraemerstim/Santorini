@@ -29,15 +29,9 @@ public class ConsolePlayer implements IPlayer {
 	public WorkerMove nextWorkerMove(Board board) {
 		showMessage("Enter two coords for the worker move seperated by a '-'. First coord for the current position,"
 				+ " second for the new position. For example: a1-b2");
-		String input = getScanner().nextLine();
 		Coord[] coords = null;
 		while (coords == null) {
-			try {
-				coords = parseInputIntoCoords(input);
-			} catch (InvalidInputException e) {
-				showMessage(input + " is not a valid move!");
-				coords = null;
-			}
+			coords = getNextMove();
 		}
 		return new WorkerMove(coords[0], coords[1]);
 	}
@@ -48,15 +42,21 @@ public class ConsolePlayer implements IPlayer {
 		while (coords == null) {
 			showMessage("Enter two coords for the build move seperated by a '-'. First coord for the worker position,"
 					+ " second for the build position. For example: a2-b3");
-			String input = getScanner().nextLine();
-			try {
-				coords = parseInputIntoCoords(input);
-			} catch (InvalidInputException e) {
-				showMessage(input + " is not a valid move!");
-				coords = null;
-			}
+			coords = getNextMove();
 		}
 		return new BuildMove(coords[0], coords[1]);
+	}
+
+	private Coord[] getNextMove() {
+		Coord[] coords;
+		String input = getScanner().nextLine();
+		try {
+			coords = parseInputIntoCoords(input);
+		} catch (InvalidInputException e) {
+			showMessage(input + " is not a valid move!");
+			coords = null;
+		}
+		return coords;
 	}
 
 	@Override

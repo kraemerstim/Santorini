@@ -17,15 +17,8 @@ public class BuildMove {
 		return worker;
 	}
 
-	public void setWorker(Coord worker) {
-		this.worker = worker;
-	}
-
 	public Coord getBuild() {
 		return build;
 	}
 
-	public void setBuild(Coord build) {
-		this.build = build;
-	}
 }
