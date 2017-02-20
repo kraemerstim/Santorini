@@ -28,7 +28,6 @@ public class Board {
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++)
 				this.board[i][j] = new Field(board.getField(i, j));
-
 	}
 
 	public Field getField(int x, int y) {
@@ -80,40 +79,6 @@ public class Board {
 
 	public int getWorkerCountByColor(Color color) {
 		return getCoordsWithWorkers(color).length;
-	}
-
-	public void setBoardFromString(String position) {
-		initBoard();
-		int index = 0;
-		char c;
-		for (int i = 0; i < boardSize; i++)
-			for (int j = 0; j < boardSize; j++) {
-				c = position.charAt(index);
-				if (Character.isDigit(c)) {
-					board[i][j].setLevel(c - '0');
-					index++;
-				}
-				c = position.charAt(index);
-				if (c == 'w')
-					board[i][j].setWorkerColor(Color.White);
-				else if (c == 'b')
-					board[i][j].setWorkerColor(Color.Blue);
-				if (!Character.isDigit(c))
-					index++;
-			}
-	}
-
-	public String getBoardString() {
-		StringBuilder result = new StringBuilder();
-		for (int i = 0; i < boardSize; i++)
-			for (int j = 0; j < boardSize; j++) {
-				result.append(board[i][j].getLevel());
-				if (board[i][j].getWorkerColor() == Color.White)
-					result.append("w");
-				else if (board[i][j].getWorkerColor() == Color.Blue)
-					result.append("b");
-			}
-		return result.toString();
 	}
 
 	public boolean isBoardValid() {

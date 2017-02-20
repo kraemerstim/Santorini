@@ -3,6 +3,7 @@ package game;
 import java.util.ArrayList;
 
 import board.Board;
+import board.BoardSerializer;
 import board.Color;
 import board.Coord;
 import board.CoordValidator;
@@ -208,8 +209,8 @@ public class Game {
 	}
 
 	public void loadBoard(String s) {
-		Board board = new Board();
-		board.setBoardFromString(s);
+		BoardSerializer boardSerializer = new BoardSerializer();
+		Board board = boardSerializer.deserialize(s);
 		if (board.isBoardValid())
 			this.board = board;
 	}
