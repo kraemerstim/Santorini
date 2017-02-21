@@ -9,7 +9,7 @@ import board.Color;
 import board.Coord;
 import board.CoordValidator;
 import board.ICoordValidator;
-import exceptions.NoWorkerOnFieldException;
+import exceptions.InvalidBoardAlterationException;
 import exceptions.TooManySameColorWorkersOnBoardException;
 import move.BuildMoveValidator;
 import move.BuildMove;
@@ -42,7 +42,7 @@ public class Game {
 		board = new Board();
 	}
 
-	public void start() {
+	public void start() throws InvalidBoardAlterationException {
 		status = Status.WorkerPlacementPhase;
 		while (status != Status.GameFinished && status != Status.GameAborted) {
 			switch (status) {
@@ -67,7 +67,7 @@ public class Game {
 		board.setWorker(coord, color);
 	}
 
-	private void waitForNextMove() {
+	private void waitForNextMove() throws InvalidBoardAlterationException {
 
 		viewer.showBoard(board);
 		WorkerMove workerMove = getNextWorkerMove();
@@ -167,19 +167,19 @@ public class Game {
 		for (Coord coord : coords) {
 			try {
 				count += getReachableCoords(coord).length;
-			} catch (NoWorkerOnFieldException e) {
+			} catch (InvalidBoardAlterationException e) {
 
 			}
 		}
 		return count == 0;
 	}
 
-	private Coord[] getReachableCoords(Coord fromCoord) throws NoWorkerOnFieldException {
+	private Coord[] getReachableCoords(Coord fromCoord) throws InvalidBoardAlterationException {
 		ArrayList<Coord> coords = new ArrayList<>();
 		WorkerMoveValidator validator = new WorkerMoveValidator(board);
 		IPlayer player = playerManager.getPlayerByColor(board.getField(fromCoord).getWorkerColor());
 		if (player == null)
-			throw new NoWorkerOnFieldException();
+			throw new InvalidBoardAlterationException("No worker on field");
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
 				int newX = fromCoord.getX() + i;
@@ -204,8 +204,8 @@ public class Game {
 		board.getField(move.getTo()).setWorkerColor(playerManager.getCurrentPlayer().getColor());
 	}
 
-	private void doMove(BuildMove move) {
-		board.getField(move.getBuild()).setLevel(board.getField(move.getBuild()).getLevel() + 1);
+	private void doMove(BuildMove move) throws InvalidBoardAlterationException {
+		board.setBlock(move.getBuild());
 	}
 
 	public void loadBoard(String s) {

@@ -33,6 +33,8 @@ public class PlayerManager implements IPlayerManager {
 
 	@Override
 	public IPlayer getPlayerByColor(Color color) {
+		if (color == Color.None)
+			return null;
 		return player1.getColor() == color ? player1 : player2;
 	}
 

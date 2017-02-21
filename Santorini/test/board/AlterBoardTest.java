@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import board.Board;
-import exceptions.FieldAlreadyOccupiedException;
+import exceptions.InvalidBoardAlterationException;
 
 public class AlterBoardTest {
 
@@ -17,7 +17,7 @@ public class AlterBoardTest {
 		board = new Board();
 		try {
 			board.setWorker(new Coord(1, 1), Color.Blue);
-		} catch (FieldAlreadyOccupiedException e) {
+		} catch (InvalidBoardAlterationException e) {
 			e.printStackTrace();
 		}
 	}
@@ -25,7 +25,7 @@ public class AlterBoardTest {
 	@Test
 	public void buildFirstBlockOnUnoccupiedSpaceShouldShowBlockOnField() throws Exception {
 		assertEquals(0, board.getField(0, 0).getLevel());
-		board.setBlock(0, 0);
+		board.setBlock(new Coord(0, 0));
 		assertEquals(1, board.getField(0, 0).getLevel());
 	}
 
@@ -36,7 +36,7 @@ public class AlterBoardTest {
 		assertEquals(Color.Blue, board.getField(0, 0).getWorkerColor());
 	}
 
-	@Test(expected = FieldAlreadyOccupiedException.class)
+	@Test(expected = InvalidBoardAlterationException.class)
 	public void setSecondWorkerOnSameFieldShouldFail() throws Exception {
 		board.setWorker(new Coord(0, 0), Color.Blue);
 		board.setWorker(new Coord(0, 0), Color.White);

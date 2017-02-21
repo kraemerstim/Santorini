@@ -2,14 +2,12 @@ package board;
 
 import java.util.ArrayList;
 
-import exceptions.FieldAlreadyOccupiedException;
-import exceptions.MaxLevelAlreadyReachedException;
-import exceptions.NoWorkerOnFieldException;
+import exceptions.InvalidBoardAlterationException;
 
 public class Board {
 
 	public static final int DEFAULT_BOARDSIZE = 5;
-	private Field[][] board;
+	private Field[][] fields;
 	private int boardSize;
 
 	public Board() {
@@ -18,63 +16,65 @@ public class Board {
 
 	public Board(int size) {
 		boardSize = size;
-		board = new Field[boardSize][boardSize];
+		fields = new Field[boardSize][boardSize];
 		initBoard();
 	}
 
 	public Board(Board board) {
 		boardSize = board.getBoardSize();
-		this.board = new Field[boardSize][boardSize];
+		this.fields = new Field[boardSize][boardSize];
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++)
-				this.board[i][j] = new Field(board.getField(i, j));
+				this.fields[i][j] = new Field(board.getField(i, j));
 	}
 
 	public Field getField(int x, int y) {
-		return board[x][y];
+		return fields[x][y];
 	}
 
 	public Field getField(Coord from) {
-		return board[from.getX()][from.getY()];
+		return fields[from.getX()][from.getY()];
 	}
 
 	public Coord[] getCoordsWithWorkers(Color color) {
-		ArrayList<Coord> fields = new ArrayList<Coord>();
+		ArrayList<Coord> workerCoords = new ArrayList<>();
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++)
-				if (board[i][j].getWorkerColor() == color)
-					fields.add(new Coord(i, j));
-		return fields.toArray(new Coord[fields.size()]);
+				if (fields[i][j].getWorkerColor() == color)
+					workerCoords.add(new Coord(i, j));
+		return workerCoords.toArray(new Coord[workerCoords.size()]);
 	}
 
 	private void initBoard() {
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++)
-				board[i][j] = new Field();
+				fields[i][j] = new Field();
 	}
 
-	public void setWorker(Coord fieldCoords, Color color) throws FieldAlreadyOccupiedException {
+	public void setWorker(Coord fieldCoords, Color color) throws InvalidBoardAlterationException {
 		if (getField(fieldCoords).getWorkerColor() != Color.None)
-			throw new FieldAlreadyOccupiedException();
+			throw new InvalidBoardAlterationException("Field already occupied by worker");
 
 		getField(fieldCoords).setWorkerColor(color);
 	}
 
-	public void removeWorker(Coord fieldCoords) throws NoWorkerOnFieldException {
+	public void removeWorker(Coord fieldCoords) throws InvalidBoardAlterationException {
 		if (getField(fieldCoords).getWorkerColor() == Color.None)
-			throw new NoWorkerOnFieldException();
+			throw new InvalidBoardAlterationException("No worker on field");
 
 		getField(fieldCoords).setWorkerColor(Color.None);
 	}
 
-	public void setBlock(int x, int y) throws MaxLevelAlreadyReachedException, FieldAlreadyOccupiedException {
-		if (board[x][y].getLevel() >= 4)
-			throw new MaxLevelAlreadyReachedException();
+	public void setBlock(Coord buildCoord) throws InvalidBoardAlterationException {
+		int x = buildCoord.getX();
+		int y = buildCoord.getY();
+		if (fields[x][y].getLevel() >= 4)
+			throw new InvalidBoardAlterationException("Maximum level reached");
 
-		if (board[x][y].getWorkerColor() != Color.None)
-			throw new FieldAlreadyOccupiedException();
+		if (fields[x][y].getWorkerColor() != Color.None)
+			throw new InvalidBoardAlterationException("Field already occupied by worker");
 
-		board[x][y].setLevel(board[x][y].getLevel() + 1);
+		fields[x][y].setLevel(fields[x][y].getLevel() + 1);
 	}
 
 	public int getWorkerCountByColor(Color color) {

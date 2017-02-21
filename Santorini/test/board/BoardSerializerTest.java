@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import exceptions.FieldAlreadyOccupiedException;
+import exceptions.InvalidBoardAlterationException;
 
 public class BoardSerializerTest {
 
@@ -48,7 +48,7 @@ public class BoardSerializerTest {
 	}
 
 	@Test
-	public void serialize_withBoard_shouldReturnBoardAsStringRepresentation() throws FieldAlreadyOccupiedException {
+	public void serialize_withBoard_shouldReturnBoardAsStringRepresentation() throws InvalidBoardAlterationException {
 		Board board = new Board();
 		board.setWorker(new Coord(3, 0), Color.Blue);
 		board.setWorker(new Coord(3, 3), Color.White);
