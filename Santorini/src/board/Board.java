@@ -81,17 +81,6 @@ public class Board {
 		return getCoordsWithWorkers(color).length;
 	}
 
-	public boolean isBoardValid() {
-		Field field;
-		for (int i = 0; i < boardSize; i++)
-			for (int j = 0; j < boardSize; j++) {
-				field = getField(i, j);
-				if (field.getLevel() < 0 || field.getLevel() > 4)
-					return false;
-			}
-		return true;
-	}
-
 	public int getBoardSize() {
 		return boardSize;
 	}

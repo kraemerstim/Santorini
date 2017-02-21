@@ -15,7 +15,8 @@ public class WorkerMoveValidator {
 
 	public boolean validate(IPlayer player, WorkerMove move) {
 		return isWorkerColorMatching(player.getColor(), move.getFrom())
-				&& isFieldNeighbouring(move.getFrom(), move.getTo()) && isFieldEmpty(move.getTo())
+				&& isFieldNeighbouring(move.getFrom(), move.getTo())
+				&& isFieldEmpty(move.getTo())
 				&& isPossibleMoveLevel(move.getFrom(), move.getTo());
 	}
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import board.Board;
 import board.BoardSerializer;
+import board.BoardValidator;
 import board.Color;
 import board.Coord;
 import board.CoordValidator;
@@ -142,7 +143,6 @@ public class Game {
 	private BuildMove getNextBuildMove() {
 		BuildMove move = null;
 		boolean validMove = false;
-		;
 		IPlayer currentPlayer = playerManager.getCurrentPlayer();
 
 		BuildMoveValidator buildMoveValidator = new BuildMoveValidator(board);
@@ -209,9 +209,10 @@ public class Game {
 	}
 
 	public void loadBoard(String s) {
+		BoardValidator boardValidator = new BoardValidator();
 		BoardSerializer boardSerializer = new BoardSerializer();
 		Board board = boardSerializer.deserialize(s);
-		if (board.isBoardValid())
+		if (boardValidator.validate(board))
 			this.board = board;
 	}
 }
