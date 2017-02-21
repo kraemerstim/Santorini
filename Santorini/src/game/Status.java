@@ -1,5 +1,5 @@
 package game;
 
 public enum Status {
-	preGame, WorkerPlacementPhase, GamePhase, GameFinished, GameAborted
+	PRE_GAME, WORKER_PLACEMENT_PHASE, GAME_PHASE, GAME_FINISHED, GAME_ABORTED
 }

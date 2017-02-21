@@ -53,9 +53,9 @@ public class ConsoleViewer implements IViewer {
 
 		for (int j = 0; j < board.getBoardSize(); j++) {
 			line.append("| " + String.valueOf(board.getField(i, j).getLevel()));
-			if (board.getField(i, j).getWorkerColor() == Color.Blue)
+			if (board.getField(i, j).getWorkerColor() == Color.BLUE)
 				line.append("b");
-			else if (board.getField(i, j).getWorkerColor() == Color.White)
+			else if (board.getField(i, j).getWorkerColor() == Color.WHITE)
 				line.append("w");
 			else
 				line.append(" ");

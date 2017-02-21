@@ -52,17 +52,17 @@ public class Board {
 	}
 
 	public void setWorker(Coord fieldCoords, Color color) throws InvalidBoardAlterationException {
-		if (getField(fieldCoords).getWorkerColor() != Color.None)
+		if (getField(fieldCoords).getWorkerColor() != Color.NONE)
 			throw new InvalidBoardAlterationException("Field already occupied by worker");
 
 		getField(fieldCoords).setWorkerColor(color);
 	}
 
 	public void removeWorker(Coord fieldCoords) throws InvalidBoardAlterationException {
-		if (getField(fieldCoords).getWorkerColor() == Color.None)
+		if (getField(fieldCoords).getWorkerColor() == Color.NONE)
 			throw new InvalidBoardAlterationException("No worker on field");
 
-		getField(fieldCoords).setWorkerColor(Color.None);
+		getField(fieldCoords).setWorkerColor(Color.NONE);
 	}
 
 	public void setBlock(Coord buildCoord) throws InvalidBoardAlterationException {
@@ -71,7 +71,7 @@ public class Board {
 		if (fields[x][y].getLevel() >= 4)
 			throw new InvalidBoardAlterationException("Maximum level reached");
 
-		if (fields[x][y].getWorkerColor() != Color.None)
+		if (fields[x][y].getWorkerColor() != Color.NONE)
 			throw new InvalidBoardAlterationException("Field already occupied by worker");
 
 		fields[x][y].setLevel(fields[x][y].getLevel() + 1);

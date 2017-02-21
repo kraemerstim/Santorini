@@ -12,16 +12,16 @@ public class BoardSerializer {
 				if (index < input.length()) {
 					c = input.charAt(index);
 					if (Character.isDigit(c)) {
-						board.getField(i,j).setLevel(c - '0');
+						board.getField(i, j).setLevel(c - '0');
 						index++;
 					}
 				}
 				if (index < input.length()) {
 					c = input.charAt(index);
 					if (c == 'w')
-						board.getField(i,j).setWorkerColor(Color.White);
+						board.getField(i, j).setWorkerColor(Color.WHITE);
 					else if (c == 'b')
-						board.getField(i,j).setWorkerColor(Color.Blue);
+						board.getField(i, j).setWorkerColor(Color.BLUE);
 					if (!Character.isDigit(c))
 						index++;
 				}
@@ -34,10 +34,10 @@ public class BoardSerializer {
 		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++) {
-				result.append(board.getField(i,j).getLevel());
-				if (board.getField(i,j).getWorkerColor() == Color.White)
+				result.append(board.getField(i, j).getLevel());
+				if (board.getField(i, j).getWorkerColor() == Color.WHITE)
 					result.append("w");
-				else if (board.getField(i,j).getWorkerColor() == Color.Blue)
+				else if (board.getField(i, j).getWorkerColor() == Color.BLUE)
 					result.append("b");
 			}
 		return result.toString();

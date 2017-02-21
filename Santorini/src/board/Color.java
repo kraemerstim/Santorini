@@ -1,5 +1,5 @@
 package board;
 
 public enum Color {
-	None, Blue, White
-};
+	NONE, BLUE, WHITE
+}

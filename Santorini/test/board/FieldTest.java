@@ -16,13 +16,13 @@ public class FieldTest {
 
 	@Test
 	public void isEmtpy_withEmptyField_ShouldReturnTrue() {
-		field.setWorkerColor(Color.None);
+		field.setWorkerColor(Color.NONE);
 		assertTrue(field.isEmpty());
 	}
 
 	@Test
 	public void isEmtpy_withNotEmptyField_ShouldReturnFalse() {
-		field.setWorkerColor(Color.Blue);
+		field.setWorkerColor(Color.BLUE);
 		assertFalse(field.isEmpty());
 	}
 

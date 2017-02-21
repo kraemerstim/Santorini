@@ -1,6 +1,7 @@
 package game;
 
-import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import board.Board;
 import board.BoardSerializer;
@@ -27,40 +28,42 @@ public class Game {
 
 	private IPlayerManager playerManager;
 	private IViewer viewer;
+	private Logger logger;
 
 	private Status status;
 
 	public Game() {
+		logger = Logger.getLogger(Game.class.getName());
 		initGame();
 	}
 
 	private void initGame() {
-		status = Status.preGame;
+		status = Status.PRE_GAME;
 		viewer = new ConsoleViewer();
-		playerManager = new PlayerManager(new ConsolePlayer(Color.Blue), new ConsolePlayer(Color.White));
+		playerManager = new PlayerManager(new ConsolePlayer(Color.BLUE), new ConsolePlayer(Color.WHITE));
 
 		board = new Board();
 	}
 
 	public void start() throws InvalidBoardAlterationException {
-		status = Status.WorkerPlacementPhase;
-		while (status != Status.GameFinished && status != Status.GameAborted) {
+		status = Status.WORKER_PLACEMENT_PHASE;
+		while (status != Status.GAME_FINISHED && status != Status.GAME_ABORTED) {
 			switch (status) {
-			case WorkerPlacementPhase:
+			case WORKER_PLACEMENT_PHASE:
 				waitForNextWorkerPlacement();
 				break;
-			case GamePhase:
+			case GAME_PHASE:
 				waitForNextMove();
 				break;
 			default:
 				break;
 			}
 		}
-		if (status == Status.GameFinished)
+		if (status == Status.GAME_FINISHED)
 			viewer.showWinner(playerManager.getCurrentPlayer());
 	}
 
-	public void setWorker(Coord coord, Color color) throws Exception {
+	public void setWorker(Coord coord, Color color) throws TooManySameColorWorkersOnBoardException {
 		if (board.getWorkerCountByColor(color) >= 2)
 			throw new TooManySameColorWorkersOnBoardException();
 
@@ -74,7 +77,7 @@ public class Game {
 		doMove(workerMove);
 
 		if (isGameOver(workerMove)) {
-			status = Status.GameFinished;
+			status = Status.GAME_FINISHED;
 			return;
 		}
 
@@ -95,29 +98,28 @@ public class Game {
 				coord = getPlayerCoord();
 				setWorker(coord, playerColor);
 			} catch (Exception e) {
+				logger.log(Level.INFO, "Exception in waitForNextWorkerPlacement", e);
 				viewer.showMessage(e.toString());
 			}
 		}
 		playerManager.next();
 
 		if (areAllWorkersSet())
-			status = Status.GamePhase;
+			status = Status.GAME_PHASE;
 	}
 
 	private boolean areAllWorkersSet() {
-		int countBlue = board.getCoordsWithWorkers(Color.Blue).length;
-		int countWhite = board.getCoordsWithWorkers(Color.White).length;
+		int countBlue = board.getCoordsWithWorkers(Color.BLUE).length;
+		int countWhite = board.getCoordsWithWorkers(Color.WHITE).length;
 		return countBlue == 2 && countWhite == 2;
 	}
 
 	private Coord getPlayerCoord() {
 		Coord nextWorkerCoord;
-		IPlayer currentPlayer = playerManager.getCurrentPlayer();
 
 		ICoordValidator validator = new CoordValidator(board.getBoardSize());
 		do {
-			currentPlayer = playerManager.getCurrentPlayer();
-			viewer.showNextPlayerWorkerPlacement(currentPlayer);
+			viewer.showNextPlayerWorkerPlacement(playerManager.getCurrentPlayer());
 			nextWorkerCoord = playerManager.getCurrentPlayer().nextWorkerPlacement(board);
 		} while (!validator.validate(nextWorkerCoord));
 		return nextWorkerCoord;
@@ -133,7 +135,7 @@ public class Game {
 		while (!validMove) {
 			viewer.showNextWorkerMove(currentPlayer);
 			move = currentPlayer.nextWorkerMove(board);
-			validMove = moveValidator.validate(currentPlayer, move);
+			validMove = moveValidator.validate(move);
 			if (!validMove)
 				viewer.showMessage("This was not a valid worker move");
 		}
@@ -158,49 +160,12 @@ public class Game {
 	}
 
 	private boolean isGameOver(WorkerMove move) {
-		return (isWinningMove(move)) || (isLastMove());
-	}
-
-	private boolean isLastMove() {
-		int count = 0;
-		Coord[] coords = board.getCoordsWithWorkers(playerManager.getFollowingPlayer().getColor());
-		for (Coord coord : coords) {
-			try {
-				count += getReachableCoords(coord).length;
-			} catch (InvalidBoardAlterationException e) {
-
-			}
-		}
-		return count == 0;
-	}
-
-	private Coord[] getReachableCoords(Coord fromCoord) throws InvalidBoardAlterationException {
-		ArrayList<Coord> coords = new ArrayList<>();
-		WorkerMoveValidator validator = new WorkerMoveValidator(board);
-		IPlayer player = playerManager.getPlayerByColor(board.getField(fromCoord).getWorkerColor());
-		if (player == null)
-			throw new InvalidBoardAlterationException("No worker on field");
-		for (int i = -1; i <= 1; i++) {
-			for (int j = -1; j <= 1; j++) {
-				int newX = fromCoord.getX() + i;
-				int newY = fromCoord.getY() + j;
-				if ((i == 0 && j == 0) || newX >= board.getBoardSize() || newX < 0 || newY >= board.getBoardSize()
-						|| newY < 0)
-					continue;
-				Coord reachableCoord = new Coord(fromCoord.getX() + i, fromCoord.getY() + j);
-				if (validator.validate(player, new WorkerMove(fromCoord, new Coord(newX, newY))))
-					coords.add(reachableCoord);
-			}
-		}
-		return coords.toArray(new Coord[coords.size()]);
-	}
-
-	private boolean isWinningMove(WorkerMove move) {
-		return (board.getField(move.getFrom()).getLevel() == 2) && (board.getField(move.getTo()).getLevel() == 3);
+		IsGameOverValidator isGameOverValidator = new IsGameOverValidator(playerManager);
+		return isGameOverValidator.validate(board, move);
 	}
 
 	private void doMove(WorkerMove move) {
-		board.getField(move.getFrom()).setWorkerColor(Color.None);
+		board.getField(move.getFrom()).setWorkerColor(Color.NONE);
 		board.getField(move.getTo()).setWorkerColor(playerManager.getCurrentPlayer().getColor());
 	}
 
@@ -211,8 +176,8 @@ public class Game {
 	public void loadBoard(String s) {
 		BoardValidator boardValidator = new BoardValidator();
 		BoardSerializer boardSerializer = new BoardSerializer();
-		Board board = boardSerializer.deserialize(s);
-		if (boardValidator.validate(board))
-			this.board = board;
+		Board serializedBoard = boardSerializer.deserialize(s);
+		if (boardValidator.validate(serializedBoard))
+			board = serializedBoard;
 	}
 }

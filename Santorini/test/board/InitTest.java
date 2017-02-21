@@ -21,15 +21,15 @@ public class InitTest {
 		for (int i = 0; i < 5; i++)
 			for (int j = 0; j < 5; j++) {
 				assertEquals(0, board.getField(i, j).getLevel());
-				assertEquals(Color.None, board.getField(i, j).getWorkerColor());
+				assertEquals(Color.NONE, board.getField(i, j).getWorkerColor());
 			}
 	}
 
 	@Test
 	public void boardReturnsExpectedStringRepresentations() throws Exception {
 		assertEquals("0000000000000000000000000", boardSerializer.serialize(board));
-		board.setWorker(new Coord(3, 0), Color.Blue);
-		board.setWorker(new Coord(3, 3), Color.White);
+		board.setWorker(new Coord(3, 0), Color.BLUE);
+		board.setWorker(new Coord(3, 3), Color.WHITE);
 		assertEquals("0000000000000000b000w000000", boardSerializer.serialize(board));
 	}
 

@@ -1,9 +1,7 @@
 package move;
 
 import board.Board;
-import board.Color;
 import board.Coord;
-import player.IPlayer;
 
 public class WorkerMoveValidator {
 
@@ -13,15 +11,9 @@ public class WorkerMoveValidator {
 		this.board = board;
 	}
 
-	public boolean validate(IPlayer player, WorkerMove move) {
-		return isWorkerColorMatching(player.getColor(), move.getFrom())
-				&& isFieldNeighbouring(move.getFrom(), move.getTo())
-				&& isFieldEmpty(move.getTo())
+	public boolean validate(WorkerMove move) {
+		return isFieldNeighbouring(move.getFrom(), move.getTo()) && isFieldEmpty(move.getTo())
 				&& isPossibleMoveLevel(move.getFrom(), move.getTo());
-	}
-
-	private boolean isWorkerColorMatching(Color color, Coord from) {
-		return color.equals(board.getField(from).getWorkerColor());
 	}
 
 	private boolean isFieldNeighbouring(Coord from, Coord to) {

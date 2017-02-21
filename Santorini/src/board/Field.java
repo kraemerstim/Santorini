@@ -6,7 +6,7 @@ public class Field {
 
 	public Field() {
 		super();
-		workerColor = Color.None;
+		workerColor = Color.NONE;
 		level = 0;
 	}
 
@@ -32,6 +32,6 @@ public class Field {
 	}
 
 	public boolean isEmpty() {
-		return this.workerColor.equals(Color.None);
+		return this.workerColor.equals(Color.NONE);
 	}
 }

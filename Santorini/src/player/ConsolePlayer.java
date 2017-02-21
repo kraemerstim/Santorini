@@ -14,15 +14,15 @@ public class ConsolePlayer implements IPlayer {
 	private Color color;
 	private static Scanner scanner;
 
+	public ConsolePlayer(Color color) {
+		super();
+		this.color = color;
+	}
+
 	private static Scanner getScanner() {
 		if (scanner == null)
 			scanner = new Scanner(System.in);
 		return scanner;
-	}
-
-	public ConsolePlayer(Color color) {
-		super();
-		this.color = color;
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class ConsolePlayer implements IPlayer {
 		if (characters[0] < 'a' || characters[0] > 'e' || Character.getNumericValue(characters[1]) < 1
 				|| Character.getNumericValue(characters[1]) > 5)
 			throw new InvalidInputException();
-		return new Coord((characters[0] - 'a'), Character.getNumericValue(characters[1]) - 1);
+		return new Coord(characters[0] - 'a', Character.getNumericValue(characters[1]) - 1);
 	}
 
 	private void showMessage(String message) {

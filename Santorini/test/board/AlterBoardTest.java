@@ -16,7 +16,7 @@ public class AlterBoardTest {
 	public void setup() {
 		board = new Board();
 		try {
-			board.setWorker(new Coord(1, 1), Color.Blue);
+			board.setWorker(new Coord(1, 1), Color.BLUE);
 		} catch (InvalidBoardAlterationException e) {
 			e.printStackTrace();
 		}
@@ -31,22 +31,22 @@ public class AlterBoardTest {
 
 	@Test
 	public void setWorkerProvidingWorkerOnField() throws Exception {
-		assertEquals(Color.None, board.getField(0, 0).getWorkerColor());
-		board.setWorker(new Coord(0, 0), Color.Blue);
-		assertEquals(Color.Blue, board.getField(0, 0).getWorkerColor());
+		assertEquals(Color.NONE, board.getField(0, 0).getWorkerColor());
+		board.setWorker(new Coord(0, 0), Color.BLUE);
+		assertEquals(Color.BLUE, board.getField(0, 0).getWorkerColor());
 	}
 
 	@Test(expected = InvalidBoardAlterationException.class)
 	public void setSecondWorkerOnSameFieldShouldFail() throws Exception {
-		board.setWorker(new Coord(0, 0), Color.Blue);
-		board.setWorker(new Coord(0, 0), Color.White);
+		board.setWorker(new Coord(0, 0), Color.BLUE);
+		board.setWorker(new Coord(0, 0), Color.WHITE);
 	}
 
 	@Test
 	public void removeWorkerFromBoardTest() throws Exception {
-		assertEquals(Color.Blue, board.getField(1, 1).getWorkerColor());
+		assertEquals(Color.BLUE, board.getField(1, 1).getWorkerColor());
 		board.removeWorker(new Coord(1, 1));
-		assertEquals(Color.None, board.getField(1, 1).getWorkerColor());
+		assertEquals(Color.NONE, board.getField(1, 1).getWorkerColor());
 	}
 
 }
