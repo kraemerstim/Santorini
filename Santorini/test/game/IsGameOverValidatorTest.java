@@ -1,4 +1,4 @@
-package board;
+package game;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import board.Board;
 import board.BoardSerializer;
+import board.Color;
 import board.Coord;
 import game.IsGameOverValidator;
 import move.WorkerMove;
