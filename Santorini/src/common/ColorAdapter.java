@@ -3,17 +3,17 @@ package common;
 public class ColorAdapter {
 
 	public String toString(Color color) {
-		if (color == Color.WHITE)
+		if (color.equals(Color.WHITE))
 			return "w";
-		else if (color == Color.BLUE)
+		else if (color.equals(Color.BLUE))
 			return "b";
 		return "";
 	}
 
 	public Color toColor(String color) {
-		if (color == "w")
+		if (color.equals("w"))
 			return Color.WHITE;
-		else if (color == "b")
+		else if (color.equals("b"))
 			return Color.BLUE;
 		return Color.NONE;
 	}
