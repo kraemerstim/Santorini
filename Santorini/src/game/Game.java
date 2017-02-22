@@ -71,10 +71,9 @@ public class Game {
 	}
 
 	private void waitForNextMove() throws InvalidBoardAlterationException {
-
 		viewer.showBoard(board);
 		WorkerMove workerMove = getNextWorkerMove();
-		doMove(workerMove);
+		doWorkerMove(workerMove);
 
 		if (isGameOver(workerMove)) {
 			status = Status.GAME_FINISHED;
@@ -83,7 +82,7 @@ public class Game {
 
 		viewer.showBoard(board);
 		BuildMove buildMove = getNextBuildMove();
-		doMove(buildMove);
+		doBuildMove(buildMove);
 
 		playerManager.next();
 	}
@@ -164,12 +163,12 @@ public class Game {
 		return isGameOverValidator.validate(board, move);
 	}
 
-	private void doMove(WorkerMove move) {
+	private void doWorkerMove(WorkerMove move) {
 		board.getField(move.getFrom()).setWorkerColor(Color.NONE);
 		board.getField(move.getTo()).setWorkerColor(playerManager.getCurrentPlayer().getColor());
 	}
 
-	private void doMove(BuildMove move) throws InvalidBoardAlterationException {
+	private void doBuildMove(BuildMove move) throws InvalidBoardAlterationException {
 		board.setBlock(move.getBuild());
 	}
 
