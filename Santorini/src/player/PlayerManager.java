@@ -1,6 +1,6 @@
 package player;
 
-import board.Color;
+import common.Color;
 
 public class PlayerManager implements IPlayerManager {
 

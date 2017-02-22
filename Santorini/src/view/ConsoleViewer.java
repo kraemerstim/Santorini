@@ -1,7 +1,7 @@
 package view;
 
 import board.Board;
-import board.Color;
+import common.Color;
 import player.IPlayer;
 
 public class ConsoleViewer implements IViewer {

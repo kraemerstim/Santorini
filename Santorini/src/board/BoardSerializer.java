@@ -1,32 +1,49 @@
 package board;
 
+import common.ColorAdapter;
+
 public class BoardSerializer {
+
+	private int currentIndex;
+	private ColorAdapter colorAdapter;
+
+	public BoardSerializer() {
+		this.colorAdapter = new ColorAdapter();
+	}
 
 	public Board deserialize(String input) {
 		Board board = new Board();
 		int boardSize = board.getBoardSize();
-		int index = 0;
-		char c;
+		currentIndex = 0;
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++) {
-				if (index < input.length()) {
-					c = input.charAt(index);
-					if (Character.isDigit(c)) {
-						board.getField(i, j).setLevel(c - '0');
-						index++;
-					}
-				}
-				if (index < input.length()) {
-					c = input.charAt(index);
-					if (c == 'w')
-						board.getField(i, j).setWorkerColor(Color.WHITE);
-					else if (c == 'b')
-						board.getField(i, j).setWorkerColor(Color.BLUE);
-					if (!Character.isDigit(c))
-						index++;
-				}
+				Field field = board.getField(i, j);
+				setLevel(field, input);
+				setWorkerColor(field, input);
 			}
 		return board;
+	}
+
+	private void setLevel(Field field, String input) {
+		char c;
+		if (currentIndex < input.length()) {
+			c = input.charAt(currentIndex);
+			if (Character.isDigit(c)) {
+				field.setLevel(c - '0');
+				currentIndex++;
+			}
+		}
+	}
+
+	private void setWorkerColor(Field field, String input) {
+		char c;
+		if (currentIndex < input.length()) {
+			c = input.charAt(currentIndex);
+			if (!Character.isDigit(c)) {
+				field.setWorkerColor(colorAdapter.toColor(Character.toString(c)));
+				currentIndex++;
+			}
+		}
 	}
 
 	public String serialize(Board board) {
@@ -34,11 +51,9 @@ public class BoardSerializer {
 		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < boardSize; i++)
 			for (int j = 0; j < boardSize; j++) {
-				result.append(board.getField(i, j).getLevel());
-				if (board.getField(i, j).getWorkerColor() == Color.WHITE)
-					result.append("w");
-				else if (board.getField(i, j).getWorkerColor() == Color.BLUE)
-					result.append("b");
+				Field field = board.getField(i, j);
+				result.append(field.getLevel());
+				result.append(colorAdapter.toString(field.getWorkerColor()));
 			}
 		return result.toString();
 	}

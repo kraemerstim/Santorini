@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import board.Board;
+import common.Color;
 import exceptions.InvalidBoardAlterationException;
 
 public class AlterBoardTest {

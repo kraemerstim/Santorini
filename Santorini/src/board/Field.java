@@ -1,5 +1,7 @@
 package board;
 
+import common.Color;
+
 public class Field {
 	private int level;
 	private Color workerColor;

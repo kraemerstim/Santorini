@@ -1,8 +1,8 @@
 package move;
 
 import board.Board;
-import board.Color;
 import board.Coord;
+import common.Color;
 import player.IPlayer;
 
 public class MoveValidator implements IMoveValidator {

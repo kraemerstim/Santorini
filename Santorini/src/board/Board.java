@@ -2,6 +2,7 @@ package board;
 
 import java.util.ArrayList;
 
+import common.Color;
 import exceptions.InvalidBoardAlterationException;
 
 public class Board {

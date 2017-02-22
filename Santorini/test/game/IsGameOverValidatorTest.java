@@ -7,8 +7,8 @@ import org.junit.Test;
 
 import board.Board;
 import board.BoardSerializer;
-import board.Color;
 import board.Coord;
+import common.Color;
 import game.IsGameOverValidator;
 import move.WorkerMove;
 import player.ConsolePlayer;

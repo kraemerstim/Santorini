@@ -3,8 +3,8 @@ package player;
 import java.util.Scanner;
 
 import board.Board;
-import board.Color;
 import board.Coord;
+import common.Color;
 import exceptions.InvalidInputException;
 import move.BuildMove;
 import move.WorkerMove;

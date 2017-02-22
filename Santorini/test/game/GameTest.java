@@ -3,8 +3,8 @@ package game;
 import org.junit.Before;
 import org.junit.Test;
 
-import board.Color;
 import board.Coord;
+import common.Color;
 import exceptions.TooManySameColorWorkersOnBoardException;
 
 public class GameTest {

@@ -1,8 +1,8 @@
 package player;
 
 import board.Board;
-import board.Color;
 import board.Coord;
+import common.Color;
 import move.BuildMove;
 import move.WorkerMove;
 
