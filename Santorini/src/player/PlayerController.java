@@ -2,13 +2,13 @@ package player;
 
 import common.Color;
 
-public class PlayerManager implements IPlayerManager {
+public class PlayerController implements IPlayerController {
 
 	private IPlayer player1;
 	private IPlayer player2;
 	private IPlayer currentPlayer;
 
-	public PlayerManager(IPlayer player1, IPlayer player2) {
+	public PlayerController(IPlayer player1, IPlayer player2) {
 		this.player1 = player1;
 		this.player2 = player2;
 		currentPlayer = player1;

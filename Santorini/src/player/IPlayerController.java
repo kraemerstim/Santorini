@@ -2,7 +2,7 @@ package player;
 
 import common.Color;
 
-public interface IPlayerManager {
+public interface IPlayerController {
 
 	public void next();
 

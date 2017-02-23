@@ -17,8 +17,8 @@ import move.BuildMove;
 import move.WorkerMove;
 import move.WorkerMoveValidator;
 import player.IPlayer;
-import player.IPlayerManager;
-import player.PlayerManager;
+import player.IPlayerController;
+import player.PlayerController;
 import view.ConsoleViewer;
 import view.IViewer;
 import player.ConsolePlayer;
@@ -26,7 +26,7 @@ import player.ConsolePlayer;
 public class Game {
 	private Board board;
 
-	private IPlayerManager playerManager;
+	private IPlayerController playerController;
 	private IViewer viewer;
 	private Logger logger;
 
@@ -40,7 +40,7 @@ public class Game {
 	private void initGame() {
 		status = Status.PRE_GAME;
 		viewer = new ConsoleViewer();
-		playerManager = new PlayerManager(new ConsolePlayer(Color.BLUE), new ConsolePlayer(Color.WHITE));
+		playerController = new PlayerController(new ConsolePlayer(Color.BLUE), new ConsolePlayer(Color.WHITE));
 
 		board = new Board();
 	}
@@ -60,7 +60,7 @@ public class Game {
 			}
 		}
 		if (status == Status.GAME_FINISHED)
-			viewer.showWinner(playerManager.getCurrentPlayer());
+			viewer.showWinner(playerController.getCurrentPlayer());
 	}
 
 	public void setWorker(Coord coord, Color color) throws TooManySameColorWorkersOnBoardException {
@@ -75,7 +75,7 @@ public class Game {
 		WorkerMove workerMove = getNextWorkerMove();
 		doWorkerMove(workerMove);
 
-		if (isGameOver(workerMove)) {
+		if (isWinningMove(workerMove)) {
 			status = Status.GAME_FINISHED;
 			return;
 		}
@@ -84,14 +84,19 @@ public class Game {
 		BuildMove buildMove = getNextBuildMove();
 		doBuildMove(buildMove);
 
-		playerManager.next();
+		if (isGameOver()) {
+			status = Status.GAME_FINISHED;
+			return;
+		}
+
+		playerController.next();
 	}
 
 	private void waitForNextWorkerPlacement() {
 		viewer.showBoard(board);
 
 		Coord coord;
-		Color playerColor = playerManager.getCurrentPlayer().getColor();
+		Color playerColor = playerController.getCurrentPlayer().getColor();
 		while (board.getCoordsWithWorkers(playerColor).length < 2) {
 			try {
 				coord = getPlayerCoord();
@@ -101,7 +106,7 @@ public class Game {
 				viewer.showMessage(e.toString());
 			}
 		}
-		playerManager.next();
+		playerController.next();
 
 		if (areAllWorkersSet())
 			status = Status.GAME_PHASE;
@@ -118,8 +123,8 @@ public class Game {
 
 		ICoordValidator validator = new CoordValidator(board.getBoardSize());
 		do {
-			viewer.showNextPlayerWorkerPlacement(playerManager.getCurrentPlayer());
-			nextWorkerCoord = playerManager.getCurrentPlayer().nextWorkerPlacement(board);
+			viewer.showNextPlayerWorkerPlacement(playerController.getCurrentPlayer());
+			nextWorkerCoord = playerController.getCurrentPlayer().nextWorkerPlacement(board);
 		} while (!validator.validate(nextWorkerCoord));
 		return nextWorkerCoord;
 	}
@@ -127,7 +132,7 @@ public class Game {
 	private WorkerMove getNextWorkerMove() {
 		WorkerMove move = null;
 		boolean validMove = false;
-		IPlayer currentPlayer = playerManager.getCurrentPlayer();
+		IPlayer currentPlayer = playerController.getCurrentPlayer();
 
 		WorkerMoveValidator moveValidator = new WorkerMoveValidator(board);
 
@@ -144,7 +149,7 @@ public class Game {
 	private BuildMove getNextBuildMove() {
 		BuildMove move = null;
 		boolean validMove = false;
-		IPlayer currentPlayer = playerManager.getCurrentPlayer();
+		IPlayer currentPlayer = playerController.getCurrentPlayer();
 
 		BuildMoveValidator buildMoveValidator = new BuildMoveValidator(board);
 
@@ -158,14 +163,19 @@ public class Game {
 		return move;
 	}
 
-	private boolean isGameOver(WorkerMove move) {
-		IsGameOverValidator isGameOverValidator = new IsGameOverValidator(playerManager);
-		return isGameOverValidator.validate(board, move);
+	private boolean isWinningMove(WorkerMove move) {
+		WinningWorkerMoveValidator isWinningWorkerMoveValidator = new WinningWorkerMoveValidator(board);
+		return isWinningWorkerMoveValidator.validate(move);
+	}
+
+	private boolean isGameOver() {
+		GameOverValidator gameOverValidator = new GameOverValidator(board);
+		return !gameOverValidator.validate(playerController.getFollowingPlayer());
 	}
 
 	private void doWorkerMove(WorkerMove move) {
 		board.getField(move.getFrom()).setWorkerColor(Color.NONE);
-		board.getField(move.getTo()).setWorkerColor(playerManager.getCurrentPlayer().getColor());
+		board.getField(move.getTo()).setWorkerColor(playerController.getCurrentPlayer().getColor());
 	}
 
 	private void doBuildMove(BuildMove move) throws InvalidBoardAlterationException {
