@@ -1,7 +1,6 @@
-package game;
+package move;
 
 import board.Board;
-import move.WorkerMove;
 
 public class WinningWorkerMoveValidator {
 

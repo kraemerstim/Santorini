@@ -1,10 +1,7 @@
-package game;
+package board;
 
 import java.util.ArrayList;
 
-import board.Board;
-import board.Coord;
-import board.CoordValidator;
 import exceptions.InvalidBoardAlterationException;
 import move.WorkerMove;
 import move.WorkerMoveValidator;

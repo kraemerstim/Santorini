@@ -13,6 +13,7 @@ import common.Color;
 import exceptions.InvalidBoardAlterationException;
 import exceptions.TooManySameColorWorkersOnBoardException;
 import move.BuildMoveValidator;
+import move.WinningWorkerMoveValidator;
 import move.BuildMove;
 import move.WorkerMove;
 import move.WorkerMoveValidator;

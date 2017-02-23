@@ -1,4 +1,4 @@
-package game;
+package board;
 
 import static org.junit.Assert.*;
 
@@ -8,6 +8,7 @@ import org.junit.Test;
 import board.Board;
 import board.BoardSerializer;
 import board.Coord;
+import board.ReachableCoordsProvider;
 import exceptions.InvalidBoardAlterationException;
 
 public class ReachableCoordsProviderTest {

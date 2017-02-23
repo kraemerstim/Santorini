@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import board.Board;
 import board.Coord;
+import board.ReachableCoordsProvider;
 import exceptions.InvalidBoardAlterationException;
 import player.IPlayer;
 

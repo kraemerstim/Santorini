@@ -1,4 +1,4 @@
-package game;
+package move;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ import board.Coord;
 import move.WorkerMove;
 import move.WorkerMoveValidator;
 
-public class WorkerMoveValidatorTest {
+public class WinningWorkerMoveValidatorTest {
 	private BoardSerializer boardSerializer;
 
 	@Before
