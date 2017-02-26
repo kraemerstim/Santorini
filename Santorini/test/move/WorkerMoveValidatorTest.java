@@ -17,9 +17,7 @@ public class WorkerMoveValidatorTest {
 
 	@Before
 	public void setup() {
-		board = new Board();
 		boardSerializer = new BoardSerializer();
-		validator = new WorkerMoveValidator(board);
 	}
 
 	@Test
@@ -32,13 +30,15 @@ public class WorkerMoveValidatorTest {
 
 	@Test
 	public void validate_withUnreachableField_shouldBeInvalid() {
+		board = boardSerializer.deserialize("0b00000000000000000000000");
 		WorkerMove move = new WorkerMove(new Coord(0, 0), new Coord(0, 2));
+		validator = new WorkerMoveValidator(board);
 		assertFalse(validator.validate(move));
 	}
 
 	@Test
 	public void validate_withOccupiedField_shouldBeInvalid() {
-		board = boardSerializer.deserialize("00b00000000000000000000000");
+		board = boardSerializer.deserialize("0b0b00000000000000000000000");
 		WorkerMove move = new WorkerMove(new Coord(0, 0), new Coord(0, 1));
 		validator = new WorkerMoveValidator(board);
 		assertFalse(validator.validate(move));

@@ -3,7 +3,6 @@ package move;
 import board.Board;
 import board.Coord;
 import common.Color;
-import player.IPlayer;
 
 public class MoveValidator implements IMoveValidator {
 
@@ -14,13 +13,34 @@ public class MoveValidator implements IMoveValidator {
 	public MoveValidator(WorkerMoveValidator workerMoveValdidator, BuildMoveValidator buildMoveValidator, Board board) {
 		this.workerMoveValdidator = workerMoveValdidator;
 		this.buildMoveValidator = buildMoveValidator;
-		this.board = board;
+		this.board = new Board(board);
 	}
 
 	@Override
-	public boolean validate(IPlayer player, WorkerMove workerMove, BuildMove buildMove) {
-		return isWorkerColorMatching(player.getColor(), workerMove.getFrom())
-				&& workerMoveValdidator.validate(workerMove) && buildMoveValidator.validate(buildMove);
+	public boolean validate(Color color, WorkerMove workerMove, BuildMove buildMove) {
+		boolean result = isWorkerColorMatching(color, workerMove.getFrom());
+		result = result && canMovedWorkerBuildOnBuildField(workerMove, buildMove);
+		result = result && validateAllMoves(workerMove, buildMove);
+		return result;
+	}
+
+	private boolean canMovedWorkerBuildOnBuildField(WorkerMove workerMove, BuildMove buildMove) {
+		return workerMove.getTo().isNeighbour(buildMove.getBuild());
+	}
+
+	private boolean validateAllMoves(WorkerMove workerMove, BuildMove buildMove) {
+		boolean result = workerMoveValdidator.validate(workerMove);
+		if (result)
+			board.applyWorkerMove(workerMove);
+		else
+			return result;
+		
+		if (buildMoveValidator.validate(buildMove))
+			board.applyBuildMove(buildMove);
+		else
+			return result;
+		
+		return result;
 	}
 
 	private boolean isWorkerColorMatching(Color color, Coord from) {

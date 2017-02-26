@@ -1,9 +1,9 @@
 package move;
 
-import player.IPlayer;
+import common.Color;
 
 public interface IMoveValidator {
 
-	public boolean validate(IPlayer player, WorkerMove workerMove, BuildMove buildMove);
+	public boolean validate(Color color, WorkerMove workerMove, BuildMove buildMove);
 
 }

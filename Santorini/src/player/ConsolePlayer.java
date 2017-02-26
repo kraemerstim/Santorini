@@ -38,13 +38,24 @@ public class ConsolePlayer implements IPlayer {
 
 	@Override
 	public BuildMove nextBuildMove(Board board) {
-		Coord[] coords = null;
-		while (coords == null) {
-			showMessage("Enter two coords for the build move seperated by a '-'. First coord for the worker position,"
-					+ " second for the build position. For example: a2-b3");
-			coords = getNextMove();
+		Coord coord = null;
+		while (coord == null) {
+			showMessage("Enter the coord for the build move. For example: b3");
+			coord = getNextCoord();
 		}
-		return new BuildMove(coords[0], coords[1]);
+		return new BuildMove(coord);
+	}
+
+	private Coord getNextCoord() {
+		Coord coord;
+		String input = getScanner().nextLine();
+		try {
+			coord = parseInputIntoCoord(input);
+		} catch (InvalidInputException e) {
+			showMessage(input + " is not a valid coord!");
+			coord = null;
+		}
+		return coord;
 	}
 
 	private Coord[] getNextMove() {

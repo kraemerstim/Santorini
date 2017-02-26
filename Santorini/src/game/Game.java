@@ -13,6 +13,7 @@ import common.Color;
 import exceptions.InvalidBoardAlterationException;
 import exceptions.TooManySameColorWorkersOnBoardException;
 import move.BuildMoveValidator;
+import move.MoveValidator;
 import move.WinningWorkerMoveValidator;
 import move.BuildMove;
 import move.WorkerMove;
@@ -73,23 +74,31 @@ public class Game {
 
 	private void waitForNextMove() throws InvalidBoardAlterationException {
 		viewer.showBoard(board);
-		WorkerMove workerMove = getNextWorkerMove();
+		MoveValidator validator = new MoveValidator(new WorkerMoveValidator(board), new BuildMoveValidator(board), board);
+		WorkerMove workerMove = null;
+		BuildMove buildMove = null;
+		boolean validated = false;
+		
+		while (!validated) {
+			workerMove = getNextWorkerMove();
+			buildMove = getNextBuildMove();
+			validated = validator.validate(playerController.getCurrentPlayer().getColor(), workerMove, buildMove);
+			if (!validated)
+				viewer.showMessage("Your moves were not valid, try again!");
+		}
+		
 		doWorkerMove(workerMove);
-
 		if (isWinningMove(workerMove)) {
 			status = Status.GAME_FINISHED;
 			return;
 		}
-
-		viewer.showBoard(board);
-		BuildMove buildMove = getNextBuildMove();
 		doBuildMove(buildMove);
-
 		if (isGameOver()) {
 			status = Status.GAME_FINISHED;
 			return;
 		}
-
+		
+		viewer.showBoard(board);
 		playerController.next();
 	}
 
@@ -131,37 +140,15 @@ public class Game {
 	}
 
 	private WorkerMove getNextWorkerMove() {
-		WorkerMove move = null;
-		boolean validMove = false;
 		IPlayer currentPlayer = playerController.getCurrentPlayer();
 
-		WorkerMoveValidator moveValidator = new WorkerMoveValidator(board);
-
-		while (!validMove) {
-			viewer.showNextWorkerMove(currentPlayer);
-			move = currentPlayer.nextWorkerMove(board);
-			validMove = moveValidator.validate(move);
-			if (!validMove)
-				viewer.showMessage("This was not a valid worker move");
-		}
-		return move;
+		return currentPlayer.nextWorkerMove(board);
 	}
 
 	private BuildMove getNextBuildMove() {
-		BuildMove move = null;
-		boolean validMove = false;
 		IPlayer currentPlayer = playerController.getCurrentPlayer();
 
-		BuildMoveValidator buildMoveValidator = new BuildMoveValidator(board);
-
-		while (!validMove) {
-			viewer.showNextWorkerMove(currentPlayer);
-			move = currentPlayer.nextBuildMove(board);
-			validMove = buildMoveValidator.validate(move);
-			if (!validMove)
-				viewer.showMessage("This was not a valid build move");
-		}
-		return move;
+		return currentPlayer.nextBuildMove(board);
 	}
 
 	private boolean isWinningMove(WorkerMove move) {
@@ -171,16 +158,15 @@ public class Game {
 
 	private boolean isGameOver() {
 		GameOverValidator gameOverValidator = new GameOverValidator(board);
-		return !gameOverValidator.validate(playerController.getFollowingPlayer());
+		return gameOverValidator.validate(playerController.getFollowingPlayer());
 	}
 
 	private void doWorkerMove(WorkerMove move) {
-		board.getField(move.getFrom()).setWorkerColor(Color.NONE);
-		board.getField(move.getTo()).setWorkerColor(playerController.getCurrentPlayer().getColor());
+		board.applyWorkerMove(move);
 	}
 
 	private void doBuildMove(BuildMove move) throws InvalidBoardAlterationException {
-		board.setBlock(move.getBuild());
+		board.applyBuildMove(move);
 	}
 
 	public void loadBoard(String s) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import common.Color;
 import exceptions.InvalidBoardAlterationException;
+import move.BuildMove;
+import move.WorkerMove;
 
 public class Board {
 
@@ -84,5 +86,16 @@ public class Board {
 
 	public int getBoardSize() {
 		return boardSize;
+	}
+	
+	public void applyWorkerMove(WorkerMove move)
+	{
+		getField(move.getTo()).setWorkerColor(getField(move.getFrom()).getWorkerColor());
+		getField(move.getFrom()).setWorkerColor(Color.NONE);
+	}
+	
+	public void applyBuildMove(BuildMove move)
+	{
+		setBlock(move.getBuild());
 	}
 }

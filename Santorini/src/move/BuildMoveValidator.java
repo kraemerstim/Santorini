@@ -16,7 +16,7 @@ public class BuildMoveValidator {
 	}
 
 	private boolean isPossibleBuildField(BuildMove move) {
-		return board.getField(move.getBuild()).isEmpty() && (move.getWorker().isNeighbour(move.getBuild()));
+		return board.getField(move.getBuild()).isEmpty();
 	}
 
 	private boolean isPossibleBuildLevel(Coord build) {
