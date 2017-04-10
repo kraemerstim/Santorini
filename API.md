@@ -30,15 +30,15 @@
 
 * **Sample Call:**
 
-  ```$.ajax({
+  ```javascript
+  $.ajax({
     url: "/game/create",
     dataType: "json",
     type: "POST",
     success: function(data) {
       this.id = data.id;
     }
-  });```
-  
+  });
  **Show game**
 ----
   Returns json data about a single game.
@@ -64,17 +64,18 @@
 * **Success Response:**
 
   * **Code:** 200 OK <br />
-    **Content:** ```{
-	              gamePhase: 0,
-                  levels: [0,1,2,3,4,...,1],
-                  workers: {
-                    player1: ["a2","b4"],
-                    player2: ["b2","c4"]
-                  },
-	              currentPlayer: 0,
-	              winner: -1
-               }```
- 
+    **Content:**
+    ```
+    {
+		gamePhase: 0,
+    	levels: [0,1,2,3,4,...,1],
+    	workers: {
+    		player1: ["a2","b4"],
+    		player2: ["b2","c4"]
+        },
+	    currentPlayer: 0,
+	    winner: -1
+    }
 * **Error Response:**
 
   * **Code:** 400 BAD REQUEST <br />
@@ -82,15 +83,15 @@
 
 * **Sample Call:**
 
-  ```$.ajax({
+  ```javascript
+  $.ajax({
     url: "/game/123",
     dataType: "json",
     type: "GET",
     success: function(data) {
       this.levels = data.levels;
     }
-  });```
-  
+  });
  **Show possible fields**
 ----
   Returns json data about possible fields.
@@ -133,16 +134,16 @@
 
 * **Sample Call:**
 
-   ```$.ajax({
-     url: "/game/123/possibleFields?worker="a2",
+  ```javascript
+  $.ajax({
+     url: "/game/123/possibleFields?worker='a2'",
      dataType: "json",
      type: "GET",
      success: function(data) {
        this.fields = data.fields;
      }
-   });```
-  
-  **Move**
+   });
+ **Move**
 ----
   Do a worker or build move.
 
@@ -163,12 +164,11 @@
 * **Data Params**
 
    **Required:**
- 
-   ```{
+   ```
+   {
       "move": ["a2","a3"],
 	  "build": ["a4"]
-   }```
-
+   }
 * **Success Response:**
 
   * **Code:** 200 OK <br />
@@ -181,11 +181,12 @@
 
 * **Sample Call:**
 
-  ```$.ajax({
-    url: "/game/123/move,
+  ```javascript
+  $.ajax({
+    url: "/game/123/move",
     dataType: "json",
     type: "POST",
     headers: {"X-HTTP-Method-Override": "PUT"},
     data: '{"move": ["a2","a3"], "build": ["a4"]}'
-  });```
+  });
   
