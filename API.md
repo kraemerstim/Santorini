@@ -67,14 +67,14 @@
     **Content:**
     ```
     {
-		gamePhase: 0,
-    	levels: [0,1,2,3,4,...,1],
-    	workers: {
-    		player1: ["a2","b4"],
-    		player2: ["b2","c4"]
+		"gamePhase": 0,
+    	"levels": [0,1,2,3,4,...,1],
+    	"workers": {
+    		"player1": ["a2","b4"],
+    		"player2": ["b2","c4"]
         },
-	    currentPlayer: 0,
-	    winner: -1
+	    "currentPlayer": 0,
+	    "winner": -1
     }
 * **Error Response:**
 
