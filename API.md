@@ -30,14 +30,14 @@
 
 * **Sample Call:**
 
-  `$.ajax({
+  ```$.ajax({
     url: "/game/create",
     dataType: "json",
     type: "POST",
     success: function(data) {
       this.id = data.id;
     }
-  });`
+  });```
   
  **Show game**
 ----
@@ -64,7 +64,7 @@
 * **Success Response:**
 
   * **Code:** 200 OK <br />
-    **Content:** `{
+    **Content:** ```{
 	              gamePhase: 0,
                   levels: [0,1,2,3,4,...,1],
                   workers: {
@@ -73,7 +73,7 @@
                   },
 	              currentPlayer: 0,
 	              winner: -1
-               }`
+               }```
  
 * **Error Response:**
 
@@ -82,14 +82,14 @@
 
 * **Sample Call:**
 
-  `$.ajax({
+  ```$.ajax({
     url: "/game/123",
     dataType: "json",
     type: "GET",
     success: function(data) {
       this.levels = data.levels;
     }
-  });`
+  });```
   
  **Show possible fields**
 ----
@@ -124,9 +124,7 @@
 * **Success Response:**
 
   * **Code:** 200 OK <br />
-    **Content:** `{
-                  fields: ["a2","a3","b4"],
-               }`
+    **Content:** `{ fields: ["a2","a3","b4"] }`
  
 * **Error Response:**
 
@@ -135,14 +133,14 @@
 
 * **Sample Call:**
 
-   `$.ajax({
+   ```$.ajax({
      url: "/game/123/possibleFields?worker="a2",
      dataType: "json",
      type: "GET",
      success: function(data) {
        this.fields = data.fields;
      }
-   });`
+   });```
   
   **Move**
 ----
@@ -166,10 +164,10 @@
 
    **Required:**
  
-   `{
+   ```{
       "move": ["a2","a3"],
 	  "build": ["a4"]
-   }`
+   }```
 
 * **Success Response:**
 
@@ -183,11 +181,11 @@
 
 * **Sample Call:**
 
-  `$.ajax({
+  ```$.ajax({
     url: "/game/123/move,
     dataType: "json",
     type: "POST",
     headers: {"X-HTTP-Method-Override": "PUT"},
     data: '{"move": ["a2","a3"], "build": ["a4"]}'
-  });`
+  });```
   
