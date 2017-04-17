@@ -16,7 +16,9 @@
 
 * **Data Params**
 
-  None
+   **Optional**
+   
+   `[BoardgameString]`
 
 * **Success Response:**
 

@@ -22,6 +22,12 @@ public class Coord {
 		return !equals(coords) && Math.abs(this.getX() - coords.getX()) <= 1
 				&& Math.abs(this.getY() - coords.getY()) <= 1;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "" + (char)('a' + x) + (y+1);
+	}
 
 	@Override
 	public int hashCode() {

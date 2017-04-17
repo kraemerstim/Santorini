@@ -53,5 +53,14 @@ public class CoordTest {
 		Coord second = new Coord(2, 2);
 		assertFalse(first.isNeighbour(second));
 	}
-
+	
+	@Test
+	public void toString_shouldReturnBoardCoordString() {
+		Coord first = new Coord(0, 0);
+		String coordString = first.toString();
+		assertTrue(coordString.compareTo("a1") == 0);
+		first = new Coord(2,3);
+		coordString = first.toString();
+		assertTrue(coordString.compareTo("c4") == 0);
+	}
 }

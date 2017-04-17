@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +35,28 @@ public class Game {
 	private Logger logger;
 
 	private Status status;
-
+	
+	private static List<Game> games;
+	
+	public static int CreateGame()
+	{
+		if (games == null)
+			games = new ArrayList<>();
+		
+		Game game = new Game();
+		games.add(game);
+		
+		return games.size() -1;
+	}
+	
+	public static Game GetGame(int gamenumber)
+	{
+		if (games.size() < (gamenumber+1))
+			return null;
+		else
+			return games.get(gamenumber);
+	}
+	
 	public Game() {
 		logger = Logger.getLogger(Game.class.getName());
 		initGame();
@@ -175,5 +198,15 @@ public class Game {
 		Board serializedBoard = boardSerializer.deserialize(s);
 		if (boardValidator.validate(serializedBoard))
 			board = serializedBoard;
+	}
+	
+	public Board getBoardCopy()
+	{
+		return new Board(board);
+	}
+	
+	public Status getStatus()
+	{
+		return status;
 	}
 }
