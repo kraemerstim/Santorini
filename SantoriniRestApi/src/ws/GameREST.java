@@ -14,8 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 import board.Board;
 import board.Coord;
-import board.Field;
-import common.Color;
 import game.Game;
  
 @Path("game")
@@ -33,17 +31,6 @@ public class GameREST {
 		return jsonObject.toString();
 	}
  
-	
-//	{
-//		"gamePhase": 0,
-//		"levels": [0,1,2,3,4,...,1],
-//		"workers": {
-//			"player1": ["a2","b4"],
-//			"player2": ["b2","c4"]
-//	    },
-//	    "currentPlayer": 0,
-//	    "winner": -1
-//	}
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
@@ -61,7 +48,7 @@ public class GameREST {
 	    objectBuilder.add("levels", arrayBuilder);
 	    
 	    arrayBuilder = Json.createArrayBuilder();
-	    for (Coord coord : board.getCoordsWithWorkers(Color.WHITE))
+	    for (Coord coord : board.getCoordsWithWorkers(game.getPlayerByIndex(0).getColor()))
 	    {
 	    	arrayBuilder.add(coord.toString());
 	    }
@@ -69,14 +56,17 @@ public class GameREST {
 	    
 	    workerBuilder.add("player1", arrayBuilder);
 	    arrayBuilder = Json.createArrayBuilder();
-	    for (Coord coord : board.getCoordsWithWorkers(Color.BLUE))
+	    for (Coord coord : board.getCoordsWithWorkers(game.getPlayerByIndex(1).getColor()))
 	    {
 	    	arrayBuilder.add(coord.toString());
 	    }
 	    workerBuilder.add("player2", arrayBuilder);
 	    objectBuilder.add("workers", workerBuilder);
 	    
-	  //Todo: workers, currentPlayer und winner!
+	    objectBuilder.add("currentPlayer", game.getCurrentPlayer().getPlayerNumber());
+	    
+	    //winner
+	    objectBuilder.add("winner", game.getWinningPlayer() == null ? -1 : game.getWinningPlayer().getPlayerNumber());
 	    
 		return objectBuilder.build().toString();
 	}

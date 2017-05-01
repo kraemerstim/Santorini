@@ -11,4 +11,6 @@ public interface IPlayerController {
 	public IPlayer getFollowingPlayer();
 
 	public IPlayer getPlayerByColor(Color color);
+	
+	public IPlayer getPlayerByIndex(int index);
 }

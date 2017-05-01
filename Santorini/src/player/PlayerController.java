@@ -38,4 +38,11 @@ public class PlayerController implements IPlayerController {
 		return player1.getColor() == color ? player1 : player2;
 	}
 
+	@Override
+	public IPlayer getPlayerByIndex(int index) {
+		if (player1.getPlayerNumber() == index) return player1;
+		if (player2.getPlayerNumber() == index) return player2;
+		return null;
+	}
+
 }

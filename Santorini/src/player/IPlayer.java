@@ -15,5 +15,7 @@ public interface IPlayer {
 	public Coord nextWorkerPlacement(Board board);
 
 	public Color getColor();
+	
+	public int getPlayerNumber();
 
 }

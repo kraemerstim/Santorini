@@ -13,10 +13,12 @@ public class ConsolePlayer implements IPlayer {
 
 	private Color color;
 	private static Scanner scanner;
+	private int PlayerNumber;
 
-	public ConsolePlayer(Color color) {
+	public ConsolePlayer(int PlayerNumber, Color color) {
 		super();
 		this.color = color;
+		this.PlayerNumber = PlayerNumber;
 	}
 
 	private static Scanner getScanner() {
@@ -115,6 +117,11 @@ public class ConsolePlayer implements IPlayer {
 
 	private void showMessage(String message) {
 		System.out.println(message);
+	}
+
+	@Override
+	public int getPlayerNumber() {
+		return PlayerNumber;
 	}
 
 }

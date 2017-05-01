@@ -22,8 +22,8 @@ public class GameOverValidatorTest {
 	@Before
 	public void setup() {
 		boardSerializer = new BoardSerializer();
-		bluePlayer = new ConsolePlayer(Color.BLUE);
-		whitePlayer = new ConsolePlayer(Color.WHITE);
+		bluePlayer = new ConsolePlayer(0, Color.BLUE);
+		whitePlayer = new ConsolePlayer(1, Color.WHITE);
 	}
 
 	@Test

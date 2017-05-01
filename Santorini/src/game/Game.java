@@ -35,6 +35,7 @@ public class Game {
 	private Logger logger;
 
 	private Status status;
+	private IPlayer winningPlayer;
 	
 	private static List<Game> games;
 	
@@ -65,8 +66,8 @@ public class Game {
 	private void initGame() {
 		status = Status.PRE_GAME;
 		viewer = new ConsoleViewer();
-		playerController = new PlayerController(new ConsolePlayer(Color.BLUE), new ConsolePlayer(Color.WHITE));
-
+		playerController = new PlayerController(new ConsolePlayer(0, Color.BLUE), new ConsolePlayer(1, Color.WHITE));
+		winningPlayer = null;
 		board = new Board();
 	}
 
@@ -113,11 +114,13 @@ public class Game {
 		doWorkerMove(workerMove);
 		if (isWinningMove(workerMove)) {
 			status = Status.GAME_FINISHED;
+			winningPlayer = playerController.getCurrentPlayer();
 			return;
 		}
 		doBuildMove(buildMove);
 		if (isGameOver()) {
 			status = Status.GAME_FINISHED;
+			winningPlayer = playerController.getCurrentPlayer();
 			return;
 		}
 		
@@ -208,5 +211,20 @@ public class Game {
 	public Status getStatus()
 	{
 		return status;
+	}
+	
+	public IPlayer getCurrentPlayer()
+	{
+		return playerController.getCurrentPlayer();
+	}
+	
+	public IPlayer getWinningPlayer()
+	{
+		return winningPlayer;
+	}
+	
+	public IPlayer getPlayerByIndex(int index)
+	{
+		return playerController.getPlayerByIndex(index);
 	}
 }
